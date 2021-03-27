@@ -1,0 +1,438 @@
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import scipy.stats as sp
+from scipy.stats import t
+from scipy import stats
+from scipy.stats import skew
+import math
+from numpy import mean
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
+
+def violin_plots(df1,df2,df3):    
+  
+    ##Crossers
+    #Upstream
+    cross_up_sfc_p=(((np.array(df1[1:2])).flatten())[1:].astype('float64'))
+    cross_up_lcl=(((np.array(df1[3:4])).flatten())[1:].astype('float64'))
+    cross_up_lfc=(((np.array(df1[4:5])).flatten())[1:].astype('float64'))
+    cross_up_el=(((np.array(df1[5:6])).flatten())[1:].astype('float64'))
+    cross_up_h0=(((np.array(df1[6:7])).flatten())[1:].astype('float64'))
+    cross_up_h_neg20=(((np.array(df1[8:9])).flatten())[1:].astype('float64'))
+    cross_up_wbzh=(((np.array(df1[9:10])).flatten())[1:].astype('float64'))
+    cross_up_1km_srh=(((np.array(df1[10:11])).flatten())[1:].astype('float64'))
+    cross_up_1km_shear=(((np.array(df1[11:12])).flatten())[1:].astype('float64'))
+    cross_up_3km_srh=(((np.array(df1[12:13])).flatten())[1:].astype('float64'))
+    cross_up_3km_shear=(((np.array(df1[13:14])).flatten())[1:].astype('float64'))
+    cross_up_6km_shear=(((np.array(df1[14:15])).flatten())[1:].astype('float64'))
+    cross_up_sbcape=(((np.array(df1[15:16])).flatten())[1:].astype('float64'))
+    cross_up_sbcin=(((np.array(df1[16:17])).flatten())[1:].astype('float64'))
+    cross_up_mlcape=(((np.array(df1[17:18])).flatten())[1:].astype('float64'))
+    cross_up_mlcin=(((np.array(df1[18:19])).flatten())[1:].astype('float64'))
+    cross_up_mucape=(((np.array(df1[19:20])).flatten())[1:].astype('float64'))
+    cross_up_mucin=(((np.array(df1[20:21])).flatten())[1:].astype('float64'))
+    cross_up_stp=(((np.array(df1[21:22])).flatten())[1:].astype('float64'))
+    cross_up_scp=(((np.array(df1[22:23])).flatten())[1:].astype('float64'))
+    cross_up_1km_lapse=(((np.array(df1[24:25])).flatten())[1:].astype('float64'))
+    cross_up_2km_lapse=(((np.array(df1[25:26])).flatten())[1:].astype('float64'))
+    cross_up_3km_lapse=(((np.array(df1[26:27])).flatten())[1:].astype('float64'))
+    cross_up_6km_lapse=(((np.array(df1[27:28])).flatten())[1:].astype('float64'))
+    cross_up_mid_lapse=(((np.array(df1[28:29])).flatten())[1:].astype('float64'))
+    cross_up_mid_rh=(((np.array(df1[29:30])).flatten())[1:].astype('float64'))
+    cross_up_sherb=(((np.array(df1[30:31])).flatten())[1:].astype('float64'))
+    cross_up_sfc_theta=(((np.array(df1[31:32])).flatten())[1:].astype('float64'))
+    cross_up_ml_theta=(((np.array(df1[32:33])).flatten())[1:].astype('float64'))
+    cross_up_dcape=(((np.array(df1[33:34])).flatten())[1:].astype('float64'))
+    
+    #Peak
+    cross_peak_sfc_p=(((np.array(df2[1:2])).flatten())[1:].astype('float64'))
+    cross_peak_lcl=(((np.array(df2[3:4])).flatten())[1:].astype('float64'))
+    cross_peak_lfc=(((np.array(df2[4:5])).flatten())[1:].astype('float64'))
+    cross_peak_el=(((np.array(df2[5:6])).flatten())[1:].astype('float64'))
+    cross_peak_h0=(((np.array(df2[6:7])).flatten())[1:].astype('float64'))
+    cross_peak_h_neg20=(((np.array(df2[8:9])).flatten())[1:].astype('float64'))
+    cross_peak_wbzh=(((np.array(df2[9:10])).flatten())[1:].astype('float64'))
+    cross_peak_1km_srh=(((np.array(df2[10:11])).flatten())[1:].astype('float64'))
+    cross_peak_1km_shear=(((np.array(df2[11:12])).flatten())[1:].astype('float64'))
+    cross_peak_3km_srh=(((np.array(df2[12:13])).flatten())[1:].astype('float64'))
+    cross_peak_3km_shear=(((np.array(df2[13:14])).flatten())[1:].astype('float64'))
+    cross_peak_6km_shear=(((np.array(df2[14:15])).flatten())[1:].astype('float64'))
+    cross_peak_sbcape=(((np.array(df2[15:16])).flatten())[1:].astype('float64'))
+    cross_peak_sbcin=(((np.array(df2[16:17])).flatten())[1:].astype('float64'))
+    cross_peak_mlcape=(((np.array(df2[17:18])).flatten())[1:].astype('float64'))
+    cross_peak_mlcin=(((np.array(df2[18:19])).flatten())[1:].astype('float64'))
+    cross_peak_mucape=(((np.array(df2[19:20])).flatten())[1:].astype('float64'))
+    cross_peak_mucin=(((np.array(df2[20:21])).flatten())[1:].astype('float64'))
+    cross_peak_stp=(((np.array(df2[21:22])).flatten())[1:].astype('float64'))
+    cross_peak_scp=(((np.array(df2[22:23])).flatten())[1:].astype('float64'))
+    cross_peak_1km_lapse=(((np.array(df2[24:25])).flatten())[1:].astype('float64'))
+    cross_peak_2km_lapse=(((np.array(df2[25:26])).flatten())[1:].astype('float64'))
+    cross_peak_3km_lapse=(((np.array(df2[26:27])).flatten())[1:].astype('float64'))
+    cross_peak_6km_lapse=(((np.array(df2[27:28])).flatten())[1:].astype('float64'))
+    cross_peak_mid_lapse=(((np.array(df2[28:29])).flatten())[1:].astype('float64'))
+    cross_peak_mid_rh=(((np.array(df2[29:30])).flatten())[1:].astype('float64'))
+    cross_peak_sherb=(((np.array(df2[30:31])).flatten())[1:].astype('float64'))
+    cross_peak_sfc_theta=(((np.array(df2[31:32])).flatten())[1:].astype('float64'))
+    cross_peak_ml_theta=(((np.array(df2[32:33])).flatten())[1:].astype('float64'))
+    cross_peak_dcape=(((np.array(df2[33:34])).flatten())[1:].astype('float64'))
+
+
+    #Down
+    cross_down_sfc_p=(((np.array(df3[1:2])).flatten())[1:].astype('float64'))
+    cross_down_lcl=(((np.array(df3[3:4])).flatten())[1:].astype('float64'))
+    cross_down_lfc=(((np.array(df3[4:5])).flatten())[1:].astype('float64'))
+    cross_down_el=(((np.array(df3[5:6])).flatten())[1:].astype('float64'))
+    cross_down_h0=(((np.array(df3[6:7])).flatten())[1:].astype('float64'))
+    cross_down_h_neg20=(((np.array(df3[8:9])).flatten())[1:].astype('float64'))
+    cross_down_wbzh=(((np.array(df3[9:10])).flatten())[1:].astype('float64'))
+    cross_down_1km_srh=(((np.array(df3[10:11])).flatten())[1:].astype('float64'))
+    cross_down_1km_shear=(((np.array(df3[11:12])).flatten())[1:].astype('float64'))
+    cross_down_3km_srh=(((np.array(df3[12:13])).flatten())[1:].astype('float64'))
+    cross_down_3km_shear=(((np.array(df3[13:14])).flatten())[1:].astype('float64'))
+    cross_down_6km_shear=(((np.array(df3[14:15])).flatten())[1:].astype('float64'))
+    cross_down_sbcape=(((np.array(df3[15:16])).flatten())[1:].astype('float64'))
+    cross_down_sbcin=(((np.array(df3[16:17])).flatten())[1:].astype('float64'))
+    cross_down_mlcape=(((np.array(df3[17:18])).flatten())[1:].astype('float64'))
+    cross_down_mlcin=(((np.array(df3[18:19])).flatten())[1:].astype('float64'))
+    cross_down_mucape=(((np.array(df3[19:20])).flatten())[1:].astype('float64'))
+    cross_down_mucin=(((np.array(df3[20:21])).flatten())[1:].astype('float64'))
+    cross_down_stp=(((np.array(df3[21:22])).flatten())[1:].astype('float64'))
+    cross_down_scp=(((np.array(df3[22:23])).flatten())[1:].astype('float64'))
+    cross_down_1km_lapse=(((np.array(df3[24:25])).flatten())[1:].astype('float64'))
+    cross_down_2km_lapse=(((np.array(df3[25:26])).flatten())[1:].astype('float64'))
+    cross_down_3km_lapse=(((np.array(df3[26:27])).flatten())[1:].astype('float64'))
+    cross_down_6km_lapse=(((np.array(df3[27:28])).flatten())[1:].astype('float64'))
+    cross_down_mid_lapse=(((np.array(df3[28:29])).flatten())[1:].astype('float64'))
+    cross_down_mid_rh=(((np.array(df3[29:30])).flatten())[1:].astype('float64'))
+    cross_down_sherb=(((np.array(df3[30:31])).flatten())[1:].astype('float64'))
+    cross_down_sfc_theta=(((np.array(df3[31:32])).flatten())[1:].astype('float64'))
+    cross_down_ml_theta=(((np.array(df3[32:33])).flatten())[1:].astype('float64'))
+    cross_down_dcape=(((np.array(df3[33:34])).flatten())[1:].astype('float64'))
+    
+    ##Non-Crossers: 
+    #upstream
+    non_up_sfc_p=(((np.array(df1[37:38])).flatten())[1:].astype('float64'))
+    non_up_lcl=(((np.array(df1[39:40])).flatten())[1:].astype('float64'))
+    non_up_lfc=(((np.array(df1[40:41])).flatten())[1:].astype('float64'))
+    non_up_el=(((np.array(df1[41:42])).flatten())[1:].astype('float64'))
+    non_up_h0=(((np.array(df1[42:43])).flatten())[1:].astype('float64'))
+    non_up_h_neg20=(((np.array(df1[43:44])).flatten())[1:].astype('float64'))
+    non_up_wbzh=(((np.array(df1[45:46])).flatten())[1:].astype('float64'))
+    non_up_1km_srh=(((np.array(df1[46:47])).flatten())[1:].astype('float64'))
+    non_up_1km_shear=(((np.array(df1[47:48])).flatten())[1:].astype('float64'))
+    non_up_3km_srh=(((np.array(df1[48:49])).flatten())[1:].astype('float64'))
+    non_up_3km_shear=(((np.array(df1[49:50])).flatten())[1:].astype('float64'))
+    non_up_6km_shear=(((np.array(df1[50:51])).flatten())[1:].astype('float64'))
+    non_up_sbcape=(((np.array(df1[51:52])).flatten())[1:].astype('float64'))
+    non_up_sbcin=(((np.array(df1[52:53])).flatten())[1:].astype('float64'))
+    non_up_mlcape=(((np.array(df1[53:54])).flatten())[1:].astype('float64'))
+    non_up_mlcin=(((np.array(df1[54:55])).flatten())[1:].astype('float64'))
+    non_up_mucape=(((np.array(df1[55:56])).flatten())[1:].astype('float64'))
+    non_up_mucin=(((np.array(df1[56:57])).flatten())[1:].astype('float64'))
+    non_up_stp=(((np.array(df1[57:58])).flatten())[1:].astype('float64'))
+    non_up_scp=(((np.array(df1[58:59])).flatten())[1:].astype('float64'))
+    non_up_1km_lapse=(((np.array(df1[60:61])).flatten())[1:].astype('float64'))
+    non_up_2km_lapse=(((np.array(df1[61:62])).flatten())[1:].astype('float64'))
+    non_up_3km_lapse=(((np.array(df1[62:63])).flatten())[1:].astype('float64'))
+    non_up_6km_lapse=(((np.array(df1[63:64])).flatten())[1:].astype('float64'))
+    non_up_mid_lapse=(((np.array(df1[64:65])).flatten())[1:].astype('float64'))
+    non_up_mid_rh=(((np.array(df1[65:66])).flatten())[1:].astype('float64'))
+    non_up_sherb=(((np.array(df1[66:67])).flatten())[1:].astype('float64'))
+    non_up_sfc_theta=(((np.array(df1[67:68])).flatten())[1:].astype('float64'))
+    non_up_ml_theta=(((np.array(df1[68:69])).flatten())[1:].astype('float64'))
+    non_up_dcape=(((np.array(df1[69:70])).flatten())[1:].astype('float64'))
+
+
+
+    #Peak
+    non_peak_sfc_p=(((np.array(df2[37:38])).flatten())[1:].astype('float64'))
+    non_peak_lcl=(((np.array(df2[39:40])).flatten())[1:].astype('float64'))
+    non_peak_lfc=(((np.array(df2[40:41])).flatten())[1:].astype('float64'))
+    non_peak_el=(((np.array(df2[41:42])).flatten())[1:].astype('float64'))
+    non_peak_h0=(((np.array(df2[42:43])).flatten())[1:].astype('float64'))
+    non_peak_h_neg20=(((np.array(df2[43:44])).flatten())[1:].astype('float64'))
+    non_peak_wbzh=(((np.array(df2[45:46])).flatten())[1:].astype('float64'))
+    non_peak_1km_srh=(((np.array(df2[46:47])).flatten())[1:].astype('float64'))
+    non_peak_1km_shear=(((np.array(df2[47:48])).flatten())[1:].astype('float64'))
+    non_peak_3km_srh=(((np.array(df2[48:49])).flatten())[1:].astype('float64'))
+    non_peak_3km_shear=(((np.array(df2[49:50])).flatten())[1:].astype('float64'))
+    non_peak_6km_shear=(((np.array(df2[50:51])).flatten())[1:].astype('float64'))
+    non_peak_sbcape=(((np.array(df2[51:52])).flatten())[1:].astype('float64'))
+    non_peak_sbcin=(((np.array(df2[52:53])).flatten())[1:].astype('float64'))
+    non_peak_mlcape=(((np.array(df2[53:54])).flatten())[1:].astype('float64'))
+    non_peak_mlcin=(((np.array(df2[54:55])).flatten())[1:].astype('float64'))
+    non_peak_mucape=(((np.array(df2[55:56])).flatten())[1:].astype('float64'))
+    non_peak_mucin=(((np.array(df2[56:57])).flatten())[1:].astype('float64'))
+    non_peak_stp=(((np.array(df2[57:58])).flatten())[1:].astype('float64'))
+    non_peak_scp=(((np.array(df2[58:59])).flatten())[1:].astype('float64'))
+    non_peak_1km_lapse=(((np.array(df2[60:61])).flatten())[1:].astype('float64'))
+    non_peak_2km_lapse=(((np.array(df2[61:62])).flatten())[1:].astype('float64'))
+    non_peak_3km_lapse=(((np.array(df2[62:63])).flatten())[1:].astype('float64'))
+    non_peak_6km_lapse=(((np.array(df2[63:64])).flatten())[1:].astype('float64'))
+    non_peak_mid_lapse=(((np.array(df2[64:65])).flatten())[1:].astype('float64'))
+    non_peak_mid_rh=(((np.array(df2[65:66])).flatten())[1:].astype('float64'))
+    non_peak_sherb=(((np.array(df2[66:67])).flatten())[1:].astype('float64'))
+    non_peak_sfc_theta=(((np.array(df2[67:68])).flatten())[1:].astype('float64'))
+    non_peak_ml_theta=(((np.array(df2[68:69])).flatten())[1:].astype('float64'))
+    non_peak_dcape=(((np.array(df2[69:70])).flatten())[1:].astype('float64'))
+
+
+
+
+    #Down
+    non_down_sfc_p=(((np.array(df3[37:38])).flatten())[1:].astype('float64'))
+    non_down_lcl=(((np.array(df3[39:40])).flatten())[1:].astype('float64'))
+    non_down_lfc=(((np.array(df3[40:41])).flatten())[1:].astype('float64'))
+    non_down_el=(((np.array(df3[41:42])).flatten())[1:].astype('float64'))
+    non_down_h0=(((np.array(df3[42:43])).flatten())[1:].astype('float64'))
+    non_down_h_neg20=(((np.array(df3[43:44])).flatten())[1:].astype('float64'))
+    non_down_wbzh=(((np.array(df3[45:46])).flatten())[1:].astype('float64'))
+    non_down_1km_srh=(((np.array(df3[46:47])).flatten())[1:].astype('float64'))
+    non_down_1km_shear=(((np.array(df3[47:48])).flatten())[1:].astype('float64'))
+    non_down_3km_srh=(((np.array(df3[48:49])).flatten())[1:].astype('float64'))
+    non_down_3km_shear=(((np.array(df3[49:50])).flatten())[1:].astype('float64'))
+    non_down_6km_shear=(((np.array(df3[50:51])).flatten())[1:].astype('float64'))
+    non_down_sbcape=(((np.array(df3[51:52])).flatten())[1:].astype('float64'))
+    non_down_sbcin=(((np.array(df3[52:53])).flatten())[1:].astype('float64'))
+    non_down_mlcape=(((np.array(df3[53:54])).flatten())[1:].astype('float64'))
+    non_down_mlcin=(((np.array(df3[54:55])).flatten())[1:].astype('float64'))
+    non_down_mucape=(((np.array(df3[55:56])).flatten())[1:].astype('float64'))
+    non_down_mucin=(((np.array(df3[56:57])).flatten())[1:].astype('float64'))
+    non_down_stp=(((np.array(df3[57:58])).flatten())[1:].astype('float64'))
+    non_down_scp=(((np.array(df3[58:59])).flatten())[1:].astype('float64'))
+    non_down_1km_lapse=(((np.array(df3[60:61])).flatten())[1:].astype('float64'))
+    non_down_2km_lapse=(((np.array(df3[61:62])).flatten())[1:].astype('float64'))
+    non_down_3km_lapse=(((np.array(df3[62:63])).flatten())[1:].astype('float64'))
+    non_down_6km_lapse=(((np.array(df3[63:64])).flatten())[1:].astype('float64'))
+    non_down_mid_lapse=(((np.array(df3[64:65])).flatten())[1:].astype('float64'))
+    non_down_mid_rh=(((np.array(df3[65:66])).flatten())[1:].astype('float64'))
+    non_down_sherb=(((np.array(df3[66:67])).flatten())[1:].astype('float64'))
+    non_down_sfc_theta=(((np.array(df3[67:68])).flatten())[1:].astype('float64'))
+    non_down_ml_theta=(((np.array(df3[68:69])).flatten())[1:].astype('float64'))
+    non_down_dcape=(((np.array(df3[69:70])).flatten())[1:].astype('float64'))
+
+    #Dataframes of crossers and Non crossers
+    all_sfc_p=pd.DataFrame({'Upstream Cross':cross_up_sfc_p,'Upstream Non-Cross':non_up_sfc_p,
+                        'Peak Cross':cross_peak_sfc_p,'Peak Non-Cross':non_peak_sfc_p,
+                       'Downstream Cross':cross_down_sfc_p,'Downstream Non-Cross':non_down_sfc_p})
+    all_lcl=pd.DataFrame({'Upstream Cross':cross_up_lcl,'Upstream Non-Cross':non_up_lcl,
+                        'Peak Cross':cross_peak_lcl,'Peak Non-Cross':non_peak_lcl,
+                       'Downstream Cross':cross_down_lcl,'Downstream Non-Cross':non_down_lcl})
+    all_lfc=pd.DataFrame({'Upstream Cross':cross_up_lfc,'Upstream Non-Cross':non_up_lfc,
+                        'Peak Cross':cross_peak_lfc,'Peak Non-Cross':non_peak_lfc,
+                       'Downstream Cross':cross_down_lfc,'Downstream Non-Cross':non_down_lfc})
+    all_el=pd.DataFrame({'Upstream Cross':cross_up_el,'Upstream Non-Cross':non_up_el,
+                        'Peak Cross':cross_peak_el,'Peak Non-Cross':non_peak_el,
+                       'Downstream Cross':cross_down_el,'Downstream Non-Cross':non_down_el})
+    all_h0=pd.DataFrame({'Upstream Cross':cross_peak_h0,'Upstream Non-Cross':non_up_h0,
+                        'Peak Cross':cross_peak_h0,'Peak Non-Cross':non_peak_h0,
+                       'Downstream Cross':cross_down_h0,'Downstream Non-Cross':non_down_h0})
+    all_h_neg20=pd.DataFrame({'Upstream Cross':cross_up_h_neg20,'Upstream Non-Cross':non_up_h_neg20,
+                        'Peak Cross':cross_peak_h_neg20,'Peak Non-Cross':non_peak_h_neg20,
+                       'Downstream Cross':cross_down_h_neg20,'Downstream Non-Cross':non_down_h_neg20})
+    all_wbz=pd.DataFrame({'Upstream Cross':cross_peak_wbzh,'Upstream Non-Cross':non_up_wbzh,
+                        'Peak Cross':cross_peak_wbzh,'Peak Non-Cross':non_peak_wbzh,
+                       'Downstream Cross':cross_down_wbzh,'Downstream Non-Cross':non_down_wbzh})
+    all_srh_1km=pd.DataFrame({'Upstream Cross':cross_peak_1km_srh,'Upstream Non-Cross':non_up_1km_srh,
+                        'Peak Cross':cross_peak_1km_srh,'Peak Non-Cross':non_peak_1km_srh,
+                       'Downstream Cross':cross_down_1km_srh,'Downstream Non-Cross':non_down_1km_srh})
+    all_shear_1km=pd.DataFrame({'Upstream Cross':cross_up_1km_shear,'Upstream Non-Cross':non_up_1km_shear,
+                        'Peak Cross':cross_peak_1km_shear,'Peak Non-Cross':non_peak_1km_shear,
+                       'Downstream Cross':cross_down_1km_shear,'Downstream Non-Cross':non_down_1km_shear})
+    all_srh_3km=pd.DataFrame({'Upstream Cross':cross_up_3km_srh,'Upstream Non-Cross':non_up_3km_srh,
+                        'Peak Cross':cross_peak_3km_srh,'Peak Non-Cross':non_peak_3km_srh,
+                       'Downstream Cross':cross_down_3km_srh,'Downstream Non-Cross':non_down_3km_srh})
+    all_shear_3km=pd.DataFrame({'Upstream Cross':cross_up_3km_shear,'Upstream Non-Cross':non_up_3km_shear,
+                        'Peak Cross':cross_peak_3km_shear,'Peak Non-Cross':non_peak_3km_shear,
+                       'Downstream Cross':cross_down_3km_shear,'Downstream Non-Cross':non_down_3km_shear})
+    all_shear_6km=pd.DataFrame({'Upstream Cross':cross_up_6km_shear,'Upstream Non-Cross':non_up_6km_shear,
+                        'Peak Cross':cross_peak_6km_shear,'Peak Non-Cross':non_peak_6km_shear,
+                       'Downstream Cross':cross_down_6km_shear,'Downstream Non-Cross':non_down_6km_shear})
+    all_sbcape=pd.DataFrame({'Upstream Cross':cross_up_sbcape,'Upstream Non-Cross':non_up_sbcape,
+                        'Peak Cross':cross_peak_sbcape,'Peak Non-Cross':non_peak_sbcape,
+                       'Downstream Cross':cross_down_sbcape,'Downstream Non-Cross':non_down_sbcape})
+    all_sbcin=pd.DataFrame({'Upstream Cross':cross_up_sbcin,'Upstream Non-Cross':non_up_sbcin,
+                        'Peak Cross':cross_peak_sbcin,'Peak Non-Cross':non_peak_sbcin,
+                       'Downstream Cross':cross_down_sbcin,'Downstream Non-Cross':non_down_sbcin})
+    all_mlcape=pd.DataFrame({'Upstream Cross':cross_up_mlcape,'Upstream Non-Cross':non_up_mlcape,
+                        'Peak Cross':cross_peak_mlcape,'Peak Non-Cross':non_peak_mlcape,
+                       'Downstream Cross':cross_down_mlcape,'Downstream Non-Cross':non_down_mlcape})
+    all_mlcin=pd.DataFrame({'Upstream Cross':cross_up_mlcin,'Upstream Non-Cross':non_up_mlcin,
+                        'Peak Cross':cross_peak_mlcin,'Peak Non-Cross':non_peak_mlcin,
+                       'Downstream Cross':cross_down_mlcin,'Downstream Non-Cross':non_down_mlcin})
+    all_mucape=pd.DataFrame({'Upstream Cross':cross_up_mucape,'Upstream Non-Cross':non_up_mucape,
+                        'Peak Cross':cross_peak_mucape,'Peak Non-Cross':non_peak_mucape,
+                       'Downstream Cross':cross_down_mucape,'Downstream Non-Cross':non_down_mucape})
+    all_mucin=pd.DataFrame({'Upstream Cross':cross_up_mucin,'Upstream Non-Cross':non_up_mucin,
+                        'Peak Cross':cross_peak_mucin,'Peak Non-Cross':non_peak_mucin,
+                       'Downstream Cross':cross_down_mucin,'Downstream Non-Cross':non_down_mucin})
+    all_stp=pd.DataFrame({'Upstream Cross':cross_up_stp,'Upstream Non-Cross':non_up_stp,
+                        'Peak Cross':cross_peak_stp,'Peak Non-Cross':non_peak_stp,
+                       'Downstream Cross':cross_down_stp,'Downstream Non-Cross':non_down_stp})
+    all_scp=pd.DataFrame({'Upstream Cross':cross_up_scp,'Upstream Non-Cross':non_up_scp,
+                        'Peak Cross':cross_peak_scp,'Peak Non-Cross':non_peak_scp,
+                       'Downstream Cross':cross_down_scp,'Downstream Non-Cross':non_down_scp})
+    all_lapse_1km=pd.DataFrame({'Upstream Cross':cross_up_1km_lapse,'Upstream Non-Cross':non_up_1km_lapse,
+                        'Peak Cross':cross_peak_1km_lapse,'Peak Non-Cross':non_peak_1km_lapse,
+                       'Downstream Cross':cross_down_1km_lapse,'Downstream Non-Cross':non_down_1km_lapse})
+    all_lapse_2km=pd.DataFrame({'Upstream Cross':cross_up_2km_lapse,'Upstream Non-Cross':non_up_2km_lapse,
+                        'Peak Cross':cross_peak_2km_lapse,'Peak Non-Cross':non_peak_2km_lapse,
+                       'Downstream Cross':cross_down_2km_lapse,'Downstream Non-Cross':non_down_2km_lapse})
+    all_lapse_3km=pd.DataFrame({'Upstream Cross':cross_up_3km_lapse,'Upstream Non-Cross':non_up_3km_lapse,
+                        'Peak Cross':cross_peak_3km_lapse,'Peak Non-Cross':non_peak_3km_lapse,
+                       'Downstream Cross':cross_down_3km_lapse,'Downstream Non-Cross':non_down_3km_lapse})
+    all_lapse_6km=pd.DataFrame({'Upstream Cross':cross_up_6km_lapse,'Upstream Non-Cross':non_up_6km_lapse,
+                        'Peak Cross':cross_peak_6km_lapse,'Peak Non-Cross':non_peak_6km_lapse,
+                       'Downstream Cross':cross_down_6km_lapse,'Downstream Non-Cross':non_down_6km_lapse})
+    all_avg_rh=pd.DataFrame({'Upstream Cross':cross_up_mid_rh,'Upstream Non-Cross':non_up_mid_rh,
+                        'Peak Cross':cross_peak_mid_rh,'Peak Non-Cross':non_peak_mid_rh,
+                             'Downstream Cross':cross_down_mid_rh,'Downstream Non-Cross':non_down_mid_rh})    
+    all_sherb=pd.DataFrame({'Upstream Cross':cross_up_sherb,'Upstream Non-Cross':non_up_sherb,
+                        'Peak Cross':cross_peak_sherb,'Peak Non-Cross':non_peak_sherb,
+                       'Downstream Cross':cross_down_sherb,'Downstream Non-Cross':non_down_sherb})
+    all_sfc_theta=pd.DataFrame({'Upstream Cross':cross_up_sfc_theta,'Upstream Non-Cross':non_up_sfc_theta,
+                        'Peak Cross':cross_peak_sfc_theta,'Peak Non-Cross':non_peak_sfc_theta,
+                       'Downstream Cross':cross_down_sfc_theta,'Downstream Non-Cross':non_down_sfc_theta})
+    all_ml_theta=pd.DataFrame({'Upstream Cross':cross_up_ml_theta,'Upstream Non-Cross':non_up_ml_theta,
+                        'Peak Cross':cross_peak_ml_theta,'Peak Non-Cross':non_peak_ml_theta,
+                       'Downstream Cross':cross_down_ml_theta,'Downstream Non-Cross':non_down_ml_theta})
+    all_mid_rh=pd.DataFrame({'Upstream Cross':cross_up_mid_rh,'Upstream Non-Cross':non_up_mid_rh,
+                        'Peak Cross':cross_peak_mid_rh,'Peak Non-Cross':non_peak_mid_rh,
+                       'Downstream Cross':cross_down_mid_rh,'Downstream Non-Cross':non_down_mid_rh})
+    all_dcape=pd.DataFrame({'Upstream Cross':cross_up_dcape,'Upstream Non-Cross':non_up_dcape,
+                        'Peak Cross':cross_peak_dcape,'Peak Non-Cross':non_peak_dcape,
+                       'Downstream Cross':cross_down_dcape,'Downstream Non-Cross':non_down_dcape})
+    
+    ##plots the dataframes as violin plots
+    #lcl,lfc, el
+    fig, axes=plt.subplots(3,1,figsize=(13,13))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,fontsize=10,data=all_lcl.dropna()).set(title=
+        'LCL Height',ylabel='Pressrue (hPa)')
+    sns.violinplot(ax=axes[1],cut=0,data=all_lfc.dropna()).set(title=
+        'LFC Height',ylabel='Pressrue (hPa)')
+    sns.violinplot(ax=axes[2],cut=0,data=all_el.dropna()).set(title=
+        'EL Height',ylabel='Pressrue (hPa)')
+    plt.savefig('all_lcl_lfc_el.png',dpi=150)
+    
+    #-----------------------------------------------
+    #0deg C,-20deg C and wetbulb zero heights
+    fig, axes=plt.subplots(3,1,figsize=(13,13))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,data=all_h0.dropna()).set(title=
+        '0'+chr(176)+'C Height',ylabel='Height (m)')
+    sns.violinplot(ax=axes[1],cut=0,data=all_h_neg20.dropna()).set(title=
+        '-20'+chr(176)+'C Height Distribution',ylabel='Height (m)')
+    sns.violinplot(ax=axes[2],cut=0,data=all_wbz.dropna()).set(title=
+        'Wetbulb Zero Height',ylabel='Height (m)')
+    plt.savefig('all_0h_-20h_wbzh.png',dpi=150)
+    #-----------------------------------------------
+    #0-1km and 0-3km SRH
+    fig, axes=plt.subplots(2,1,figsize=(13,13))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,data=all_srh_1km.dropna()).set(title=
+        '0-1km Storm Relative Helicity',ylabel='SRH ($m^2/s^2$)')
+    sns.violinplot(ax=axes[1],cut=0,data=all_srh_3km.dropna()).set(title=
+        '0-3km Storm Relative Helicity',ylabel='SRH ($m^2/s^2$)')
+    plt.savefig('all_srh.png',dpi=150)
+    #-----------------------------------------------
+    #0-1km and 0-3km shear
+    fig, axes=plt.subplots(2,1,figsize=(13,13))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,data=all_shear_1km.dropna()).set(title=
+        '0-1km Shear',ylabel='Shear (m/s)')
+    sns.violinplot(ax=axes[1],cut=0,data=all_shear_3km.dropna()).set(title=
+        '0-3km Shear',ylabel='Shear (m/s)')
+    plt.savefig('all_shear.png',dpi=150)
+    #-----------------------------------------------
+    #SBCAPE, MLCAPE, MUCAPE
+    fig, axes=plt.subplots(3,1,figsize=(13,13))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,data=all_sbcape.dropna()).set(title=
+        'SBCAPE',ylabel='CAPE (j/kg)')
+    sns.violinplot(ax=axes[1],cut=0,data=all_mlcape.dropna()).set(title=
+        'MLCAPE',ylabel='CAPE (j/kg)')
+    sns.violinplot(ax=axes[2],cut=0,data=all_mucape.dropna()).set(title=
+        'MUCAPE',ylabel='CAPE (j/kg)')
+    plt.savefig('all_cape.png',dpi=150)
+
+    #-----------------------------------------------
+    #surface potential temp, mix-layer potential temp, and average 700-400 hPa RH
+    fig, axes=plt.subplots(3,1,figsize=(13,16))
+    sns.set_palette("rainbow_r")
+    sns.violinplot(ax=axes[0],cut=0,data=all_sfc_theta.dropna()).set(title=
+        'Surface '+r'$ \theta_e$',ylabel='Theta-E')
+    sns.violinplot(ax=axes[1],cut=0,data=all_ml_theta.dropna()).set(title=
+        'Mixed Layer '+r'$ \theta_e$',ylabel='Theta-E')
+    sns.violinplot(ax=axes[2],cut=0,data=all_mid_rh.dropna()).set(title=
+        'Avgerage 700-400 hPa RH',ylabel='%')
+    plt.savefig('all_moist.png',dpi=150)
+    
+    #Prints out the 25th, 50th, and 75th percentiles
+    print('0-1km SRH:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_1km_srh,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_1km_srh,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_1km_srh,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_1km_srh,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_1km_srh,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_1km_srh,75))
+    print('--------------------------------')
+    print()
+    print('0-3km SRH:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_3km_srh,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_3km_srh,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_3km_srh,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_3km_srh,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_3km_srh,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_3km_srh,75))
+    print('--------------------------------')
+    print('0-1km Shear:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_1km_shear,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_1km_shear,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_1km_shear,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_1km_shear,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_1km_shear,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_1km_shear,75))
+    print('--------------------------------')
+    print()
+    print('0-3km Shear:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_3km_shear,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_3km_shear,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_3km_shear,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_3km_shear,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_3km_shear,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_3km_shear,75))
+    print('--------------------------------')
+    print()
+    print('RH:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_mid_rh,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_mid_rh,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_mid_rh,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_mid_rh,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_mid_rh,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_mid_rh,75))
+    print('--------------------------------')
+    print('Surface theta:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_sfc_theta,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_sfc_theta,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_sfc_theta,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_sfc_theta,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_sfc_theta,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_sfc_theta,75))
+    print('--------------------------------')
+    print('ML theta:')
+    print('Cross 25th percentile:',np.nanpercentile(cross_up_ml_theta,25))
+    print('Cross 50th percentile:',np.nanpercentile(cross_up_ml_theta,50))
+    print('Cross 75th percentile:',np.nanpercentile(cross_up_ml_theta,75))
+    print()
+    print('Non-Cross 25th percentile:',np.nanpercentile(non_up_ml_theta,25))
+    print('Non-Cross 50th percentile:',np.nanpercentile(non_up_ml_theta,50))
+    print('Non-Cross 75th percentile:',np.nanpercentile(non_up_ml_theta,75))
+    print('--------------------------------')
