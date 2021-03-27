@@ -1,0 +1,1349 @@
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from scipy.stats import t
+from scipy import stats
+from scipy.stats import skew
+import math
+import matplotlib.pyplot as plt
+
+def normality(df1,df2,df3):
+    
+#Create arrays for each of the variables from dataframes    
+    ##Crossers: 
+    #upstream
+    cross_up_sfc_p=(((np.array(df1[1:2])).flatten())[1:].astype('float64'))
+    cross_up_lcl=(((np.array(df1[3:4])).flatten())[1:].astype('float64'))
+    cross_up_lfc=(((np.array(df1[4:5])).flatten())[1:].astype('float64'))
+    cross_up_el=(((np.array(df1[5:6])).flatten())[1:].astype('float64'))
+    cross_up_h0=(((np.array(df1[6:7])).flatten())[1:].astype('float64'))
+    cross_up_h_neg20=(((np.array(df1[8:9])).flatten())[1:].astype('float64'))
+    cross_up_wbzh=(((np.array(df1[9:10])).flatten())[1:].astype('float64'))
+    cross_up_1km_srh=(((np.array(df1[10:11])).flatten())[1:].astype('float64'))
+    cross_up_1km_shear=(((np.array(df1[11:12])).flatten())[1:].astype('float64'))
+    cross_up_3km_srh=(((np.array(df1[12:13])).flatten())[1:].astype('float64'))
+    cross_up_3km_shear=(((np.array(df1[13:14])).flatten())[1:].astype('float64'))
+    cross_up_6km_shear=(((np.array(df1[14:15])).flatten())[1:].astype('float64'))
+    cross_up_sbcape=(((np.array(df1[15:16])).flatten())[1:].astype('float64'))
+    cross_up_sbcin=(((np.array(df1[16:17])).flatten())[1:].astype('float64'))
+    cross_up_mlcape=(((np.array(df1[17:18])).flatten())[1:].astype('float64'))
+    cross_up_mlcin=(((np.array(df1[18:19])).flatten())[1:].astype('float64'))
+    cross_up_mucape=(((np.array(df1[19:20])).flatten())[1:].astype('float64'))
+    cross_up_mucin=(((np.array(df1[20:21])).flatten())[1:].astype('float64'))
+    cross_up_stp=(((np.array(df1[21:22])).flatten())[1:].astype('float64'))
+    cross_up_scp=(((np.array(df1[22:23])).flatten())[1:].astype('float64'))
+    cross_up_1km_lapse=(((np.array(df1[24:25])).flatten())[1:].astype('float64'))
+    cross_up_2km_lapse=(((np.array(df1[25:26])).flatten())[1:].astype('float64'))
+    cross_up_3km_lapse=(((np.array(df1[26:27])).flatten())[1:].astype('float64'))
+    cross_up_6km_lapse=(((np.array(df1[27:28])).flatten())[1:].astype('float64'))
+    cross_up_mid_lapse=(((np.array(df1[28:29])).flatten())[1:].astype('float64'))
+    cross_up_mid_rh=(((np.array(df1[29:30])).flatten())[1:].astype('float64'))
+    cross_up_sherb=(((np.array(df1[30:31])).flatten())[1:].astype('float64'))
+    cross_up_sfc_theta=(((np.array(df1[31:32])).flatten())[1:].astype('float64'))
+    cross_up_ml_theta=(((np.array(df1[32:33])).flatten())[1:].astype('float64'))
+    cross_up_dcape=(((np.array(df1[33:34])).flatten())[1:].astype('float64'))
+    
+    #Peak
+    cross_peak_sfc_p=(((np.array(df2[1:2])).flatten())[1:].astype('float64'))
+    cross_peak_lcl=(((np.array(df2[3:4])).flatten())[1:].astype('float64'))
+    cross_peak_lfc=(((np.array(df2[4:5])).flatten())[1:].astype('float64'))
+    cross_peak_el=(((np.array(df2[5:6])).flatten())[1:].astype('float64'))
+    cross_peak_h0=(((np.array(df2[6:7])).flatten())[1:].astype('float64'))
+    cross_peak_h_neg20=(((np.array(df2[8:9])).flatten())[1:].astype('float64'))
+    cross_peak_wbzh=(((np.array(df2[9:10])).flatten())[1:].astype('float64'))
+    cross_peak_1km_srh=(((np.array(df2[10:11])).flatten())[1:].astype('float64'))
+    cross_peak_1km_shear=(((np.array(df2[11:12])).flatten())[1:].astype('float64'))
+    cross_peak_3km_srh=(((np.array(df2[12:13])).flatten())[1:].astype('float64'))
+    cross_peak_3km_shear=(((np.array(df2[13:14])).flatten())[1:].astype('float64'))
+    cross_peak_6km_shear=(((np.array(df2[14:15])).flatten())[1:].astype('float64'))
+    cross_peak_sbcape=(((np.array(df2[15:16])).flatten())[1:].astype('float64'))
+    cross_peak_sbcin=(((np.array(df2[16:17])).flatten())[1:].astype('float64'))
+    cross_peak_mlcape=(((np.array(df2[17:18])).flatten())[1:].astype('float64'))
+    cross_peak_mlcin=(((np.array(df2[18:19])).flatten())[1:].astype('float64'))
+    cross_peak_mucape=(((np.array(df2[19:20])).flatten())[1:].astype('float64'))
+    cross_peak_mucin=(((np.array(df2[20:21])).flatten())[1:].astype('float64'))
+    cross_peak_stp=(((np.array(df2[21:22])).flatten())[1:].astype('float64'))
+    cross_peak_scp=(((np.array(df2[22:23])).flatten())[1:].astype('float64'))
+    cross_peak_1km_lapse=(((np.array(df2[24:25])).flatten())[1:].astype('float64'))
+    cross_peak_2km_lapse=(((np.array(df2[25:26])).flatten())[1:].astype('float64'))
+    cross_peak_3km_lapse=(((np.array(df2[26:27])).flatten())[1:].astype('float64'))
+    cross_peak_6km_lapse=(((np.array(df2[27:28])).flatten())[1:].astype('float64'))
+    cross_peak_mid_lapse=(((np.array(df2[28:29])).flatten())[1:].astype('float64'))
+    cross_peak_mid_rh=(((np.array(df2[29:30])).flatten())[1:].astype('float64'))
+    cross_peak_sherb=(((np.array(df2[30:31])).flatten())[1:].astype('float64'))
+    cross_peak_sfc_theta=(((np.array(df2[31:32])).flatten())[1:].astype('float64'))
+    cross_peak_ml_theta=(((np.array(df2[32:33])).flatten())[1:].astype('float64'))
+    cross_peak_dcape=(((np.array(df2[33:34])).flatten())[1:].astype('float64'))
+
+
+    #Down
+    cross_down_sfc_p=(((np.array(df3[1:2])).flatten())[1:].astype('float64'))
+    cross_down_lcl=(((np.array(df3[3:4])).flatten())[1:].astype('float64'))
+    cross_down_lfc=(((np.array(df3[4:5])).flatten())[1:].astype('float64'))
+    cross_down_el=(((np.array(df3[5:6])).flatten())[1:].astype('float64'))
+    cross_down_h0=(((np.array(df3[6:7])).flatten())[1:].astype('float64'))
+    cross_down_h_neg20=(((np.array(df3[8:9])).flatten())[1:].astype('float64'))
+    cross_down_wbzh=(((np.array(df3[9:10])).flatten())[1:].astype('float64'))
+    cross_down_1km_srh=(((np.array(df3[10:11])).flatten())[1:].astype('float64'))
+    cross_down_1km_shear=(((np.array(df3[11:12])).flatten())[1:].astype('float64'))
+    cross_down_3km_srh=(((np.array(df3[12:13])).flatten())[1:].astype('float64'))
+    cross_down_3km_shear=(((np.array(df3[13:14])).flatten())[1:].astype('float64'))
+    cross_down_6km_shear=(((np.array(df3[14:15])).flatten())[1:].astype('float64'))
+    cross_down_sbcape=(((np.array(df3[15:16])).flatten())[1:].astype('float64'))
+    cross_down_sbcin=(((np.array(df3[16:17])).flatten())[1:].astype('float64'))
+    cross_down_mlcape=(((np.array(df3[17:18])).flatten())[1:].astype('float64'))
+    cross_down_mlcin=(((np.array(df3[18:19])).flatten())[1:].astype('float64'))
+    cross_down_mucape=(((np.array(df3[19:20])).flatten())[1:].astype('float64'))
+    cross_down_mucin=(((np.array(df3[20:21])).flatten())[1:].astype('float64'))
+    cross_down_stp=(((np.array(df3[21:22])).flatten())[1:].astype('float64'))
+    cross_down_scp=(((np.array(df3[22:23])).flatten())[1:].astype('float64'))
+    cross_down_1km_lapse=(((np.array(df3[24:25])).flatten())[1:].astype('float64'))
+    cross_down_2km_lapse=(((np.array(df3[25:26])).flatten())[1:].astype('float64'))
+    cross_down_3km_lapse=(((np.array(df3[26:27])).flatten())[1:].astype('float64'))
+    cross_down_6km_lapse=(((np.array(df3[27:28])).flatten())[1:].astype('float64'))
+    cross_down_mid_lapse=(((np.array(df3[28:29])).flatten())[1:].astype('float64'))
+    cross_down_mid_rh=(((np.array(df3[29:30])).flatten())[1:].astype('float64'))
+    cross_down_sherb=(((np.array(df3[30:31])).flatten())[1:].astype('float64'))
+    cross_down_sfc_theta=(((np.array(df3[31:32])).flatten())[1:].astype('float64'))
+    cross_down_ml_theta=(((np.array(df3[32:33])).flatten())[1:].astype('float64'))
+    cross_down_dcape=(((np.array(df3[33:34])).flatten())[1:].astype('float64'))
+    
+    ##Non-Crossers: 
+    #upstream
+    non_up_sfc_p=(((np.array(df1[37:38])).flatten())[1:].astype('float64'))
+    non_up_lcl=(((np.array(df1[39:40])).flatten())[1:].astype('float64'))
+    non_up_lfc=(((np.array(df1[40:41])).flatten())[1:].astype('float64'))
+    non_up_el=(((np.array(df1[41:42])).flatten())[1:].astype('float64'))
+    non_up_h0=(((np.array(df1[42:43])).flatten())[1:].astype('float64'))
+    non_up_h_neg20=(((np.array(df1[43:44])).flatten())[1:].astype('float64'))
+    non_up_wbzh=(((np.array(df1[45:46])).flatten())[1:].astype('float64'))
+    non_up_1km_srh=(((np.array(df1[46:47])).flatten())[1:].astype('float64'))
+    non_up_1km_shear=(((np.array(df1[47:48])).flatten())[1:].astype('float64'))
+    non_up_3km_srh=(((np.array(df1[48:49])).flatten())[1:].astype('float64'))
+    non_up_3km_shear=(((np.array(df1[49:50])).flatten())[1:].astype('float64'))
+    non_up_6km_shear=(((np.array(df1[50:51])).flatten())[1:].astype('float64'))
+    non_up_sbcape=(((np.array(df1[51:52])).flatten())[1:].astype('float64'))
+    non_up_sbcin=(((np.array(df1[52:53])).flatten())[1:].astype('float64'))
+    non_up_mlcape=(((np.array(df1[53:54])).flatten())[1:].astype('float64'))
+    non_up_mlcin=(((np.array(df1[54:55])).flatten())[1:].astype('float64'))
+    non_up_mucape=(((np.array(df1[55:56])).flatten())[1:].astype('float64'))
+    non_up_mucin=(((np.array(df1[56:57])).flatten())[1:].astype('float64'))
+    non_up_stp=(((np.array(df1[57:58])).flatten())[1:].astype('float64'))
+    non_up_scp=(((np.array(df1[58:59])).flatten())[1:].astype('float64'))
+    non_up_1km_lapse=(((np.array(df1[60:61])).flatten())[1:].astype('float64'))
+    non_up_2km_lapse=(((np.array(df1[61:62])).flatten())[1:].astype('float64'))
+    non_up_3km_lapse=(((np.array(df1[62:63])).flatten())[1:].astype('float64'))
+    non_up_6km_lapse=(((np.array(df1[63:64])).flatten())[1:].astype('float64'))
+    non_up_mid_lapse=(((np.array(df1[64:65])).flatten())[1:].astype('float64'))
+    non_up_mid_rh=(((np.array(df1[65:66])).flatten())[1:].astype('float64'))
+    non_up_sherb=(((np.array(df1[66:67])).flatten())[1:].astype('float64'))
+    non_up_sfc_theta=(((np.array(df1[67:68])).flatten())[1:].astype('float64'))
+    non_up_ml_theta=(((np.array(df1[68:69])).flatten())[1:].astype('float64'))
+    non_up_dcape=(((np.array(df1[69:70])).flatten())[1:].astype('float64'))
+
+
+
+    #Peak
+    non_peak_sfc_p=(((np.array(df2[37:38])).flatten())[1:].astype('float64'))
+    non_peak_lcl=(((np.array(df2[39:40])).flatten())[1:].astype('float64'))
+    non_peak_lfc=(((np.array(df2[40:41])).flatten())[1:].astype('float64'))
+    non_peak_el=(((np.array(df2[41:42])).flatten())[1:].astype('float64'))
+    non_peak_h0=(((np.array(df2[42:43])).flatten())[1:].astype('float64'))
+    non_peak_h_neg20=(((np.array(df2[43:44])).flatten())[1:].astype('float64'))
+    non_peak_wbzh=(((np.array(df2[45:46])).flatten())[1:].astype('float64'))
+    non_peak_1km_srh=(((np.array(df2[46:47])).flatten())[1:].astype('float64'))
+    non_peak_1km_shear=(((np.array(df2[47:48])).flatten())[1:].astype('float64'))
+    non_peak_3km_srh=(((np.array(df2[48:49])).flatten())[1:].astype('float64'))
+    non_peak_3km_shear=(((np.array(df2[49:50])).flatten())[1:].astype('float64'))
+    non_peak_6km_shear=(((np.array(df2[50:51])).flatten())[1:].astype('float64'))
+    non_peak_sbcape=(((np.array(df2[51:52])).flatten())[1:].astype('float64'))
+    non_peak_sbcin=(((np.array(df2[52:53])).flatten())[1:].astype('float64'))
+    non_peak_mlcape=(((np.array(df2[53:54])).flatten())[1:].astype('float64'))
+    non_peak_mlcin=(((np.array(df2[54:55])).flatten())[1:].astype('float64'))
+    non_peak_mucape=(((np.array(df2[55:56])).flatten())[1:].astype('float64'))
+    non_peak_mucin=(((np.array(df2[56:57])).flatten())[1:].astype('float64'))
+    non_peak_stp=(((np.array(df2[57:58])).flatten())[1:].astype('float64'))
+    non_peak_scp=(((np.array(df2[58:59])).flatten())[1:].astype('float64'))
+    non_peak_1km_lapse=(((np.array(df2[60:61])).flatten())[1:].astype('float64'))
+    non_peak_2km_lapse=(((np.array(df2[61:62])).flatten())[1:].astype('float64'))
+    non_peak_3km_lapse=(((np.array(df2[62:63])).flatten())[1:].astype('float64'))
+    non_peak_6km_lapse=(((np.array(df2[63:64])).flatten())[1:].astype('float64'))
+    non_peak_mid_lapse=(((np.array(df2[64:65])).flatten())[1:].astype('float64'))
+    non_peak_mid_rh=(((np.array(df2[65:66])).flatten())[1:].astype('float64'))
+    non_peak_sherb=(((np.array(df2[66:67])).flatten())[1:].astype('float64'))
+    non_peak_sfc_theta=(((np.array(df2[67:68])).flatten())[1:].astype('float64'))
+    non_peak_ml_theta=(((np.array(df2[68:69])).flatten())[1:].astype('float64'))
+    non_peak_dcape=(((np.array(df2[69:70])).flatten())[1:].astype('float64'))
+
+
+
+
+    #Down
+    non_down_sfc_p=(((np.array(df3[37:38])).flatten())[1:].astype('float64'))
+    non_down_lcl=(((np.array(df3[39:40])).flatten())[1:].astype('float64'))
+    non_down_lfc=(((np.array(df3[40:41])).flatten())[1:].astype('float64'))
+    non_down_el=(((np.array(df3[41:42])).flatten())[1:].astype('float64'))
+    non_down_h0=(((np.array(df3[42:43])).flatten())[1:].astype('float64'))
+    non_down_h_neg20=(((np.array(df3[43:44])).flatten())[1:].astype('float64'))
+    non_down_wbzh=(((np.array(df3[45:46])).flatten())[1:].astype('float64'))
+    non_down_1km_srh=(((np.array(df3[46:47])).flatten())[1:].astype('float64'))
+    non_down_1km_shear=(((np.array(df3[47:48])).flatten())[1:].astype('float64'))
+    non_down_3km_srh=(((np.array(df3[48:49])).flatten())[1:].astype('float64'))
+    non_down_3km_shear=(((np.array(df3[49:50])).flatten())[1:].astype('float64'))
+    non_down_6km_shear=(((np.array(df3[50:51])).flatten())[1:].astype('float64'))
+    non_down_sbcape=(((np.array(df3[51:52])).flatten())[1:].astype('float64'))
+    non_down_sbcin=(((np.array(df3[52:53])).flatten())[1:].astype('float64'))
+    non_down_mlcape=(((np.array(df3[53:54])).flatten())[1:].astype('float64'))
+    non_down_mlcin=(((np.array(df3[54:55])).flatten())[1:].astype('float64'))
+    non_down_mucape=(((np.array(df3[55:56])).flatten())[1:].astype('float64'))
+    non_down_mucin=(((np.array(df3[56:57])).flatten())[1:].astype('float64'))
+    non_down_stp=(((np.array(df3[57:58])).flatten())[1:].astype('float64'))
+    non_down_scp=(((np.array(df3[58:59])).flatten())[1:].astype('float64'))
+    non_down_1km_lapse=(((np.array(df3[60:61])).flatten())[1:].astype('float64'))
+    non_down_2km_lapse=(((np.array(df3[61:62])).flatten())[1:].astype('float64'))
+    non_down_3km_lapse=(((np.array(df3[62:63])).flatten())[1:].astype('float64'))
+    non_down_6km_lapse=(((np.array(df3[63:64])).flatten())[1:].astype('float64'))
+    non_down_mid_lapse=(((np.array(df3[64:65])).flatten())[1:].astype('float64'))
+    non_down_mid_rh=(((np.array(df3[65:66])).flatten())[1:].astype('float64'))
+    non_down_sherb=(((np.array(df3[66:67])).flatten())[1:].astype('float64'))
+    non_down_sfc_theta=(((np.array(df3[67:68])).flatten())[1:].astype('float64'))
+    non_down_ml_theta=(((np.array(df3[68:69])).flatten())[1:].astype('float64'))
+    non_down_dcape=(((np.array(df3[69:70])).flatten())[1:].astype('float64'))
+
+    
+#Creating arrays to calculate the mean of arrays 
+
+    ##Crossers: 
+    #upstream
+    cross_up_sfc_p_mean=np.mean(cross_up_sfc_p[np.logical_not(np.isnan(cross_up_sfc_p))])
+    cross_up_lcl_mean=np.mean(cross_up_lcl[np.logical_not(np.isnan(cross_up_lcl))])
+    cross_up_lfc_mean=np.mean(cross_up_lfc[np.logical_not(np.isnan(cross_up_lfc))])
+    cross_up_el_mean=np.mean(cross_up_el[np.logical_not(np.isnan(cross_up_el))])
+    cross_up_h0_mean=np.mean(cross_up_h0[np.logical_not(np.isnan(cross_up_h0))])
+    cross_up_h_neg20_mean=np.mean(cross_up_h_neg20[np.logical_not(np.isnan(cross_up_h_neg20))])
+    cross_up_wbzh_mean=np.mean(cross_up_wbzh[np.logical_not(np.isnan(cross_up_wbzh))])
+    cross_up_1km_srh_mean=np.mean(cross_up_1km_srh[np.logical_not(np.isnan(cross_up_1km_srh))])
+    cross_up_3km_srh_mean=np.mean(cross_up_3km_srh[np.logical_not(np.isnan(cross_up_3km_srh))])
+    cross_up_1km_shear_mean=np.mean(cross_up_1km_shear[np.logical_not(np.isnan(cross_up_1km_shear))])
+    cross_up_3km_shear_mean=np.mean(cross_up_3km_shear[np.logical_not(np.isnan(cross_up_3km_shear))])
+    cross_up_6km_shear_mean=np.mean(cross_up_6km_shear[np.logical_not(np.isnan(cross_up_6km_shear))])
+    cross_up_sbcape_mean=np.mean(cross_up_sbcape[np.logical_not(np.isnan(cross_up_sbcape))])
+    cross_up_mlcape_mean=np.mean(cross_up_mlcape[np.logical_not(np.isnan(cross_up_mlcape))])
+    cross_up_mucape_mean=np.mean(cross_up_mucape[np.logical_not(np.isnan(cross_up_mucape))])
+    cross_up_sbcin_mean=np.mean(cross_up_sbcin[np.logical_not(np.isnan(cross_up_sbcin))])
+    cross_up_mlcin_mean=np.mean(cross_up_mlcin[np.logical_not(np.isnan(cross_up_mlcin))])
+    cross_up_mucin_mean=np.mean(cross_up_mucin[np.logical_not(np.isnan(cross_up_mucin))])
+    cross_up_stp_mean=np.mean(cross_up_stp[np.logical_not(np.isnan(cross_up_stp))])
+    cross_up_scp_mean=np.mean(cross_up_scp[np.logical_not(np.isnan(cross_up_scp))])
+    cross_up_1km_lapse_mean=np.mean(cross_up_1km_lapse[np.logical_not(np.isnan(cross_up_1km_lapse))])
+    cross_up_2km_lapse_mean=np.mean(cross_up_2km_lapse[np.logical_not(np.isnan(cross_up_2km_lapse))])
+    cross_up_3km_lapse_mean=np.mean(cross_up_3km_lapse[np.logical_not(np.isnan(cross_up_3km_lapse))])
+    cross_up_6km_lapse_mean=np.mean(cross_up_6km_lapse[np.logical_not(np.isnan(cross_up_6km_lapse))])
+    cross_up_mid_rh_mean=np.mean(cross_up_mid_rh[np.logical_not(np.isnan(cross_up_mid_rh))])
+    cross_up_sherb_mean=np.mean(cross_up_sherb[np.logical_not(np.isnan(cross_up_sherb))])
+    cross_up_sfc_theta_mean=np.mean(cross_up_sfc_theta[np.logical_not(np.isnan(cross_up_sfc_theta))])
+    cross_up_ml_theta_mean=np.mean(cross_up_ml_theta[np.logical_not(np.isnan(cross_up_ml_theta))])
+    cross_up_dcape_mean=np.mean(cross_up_dcape[np.logical_not(np.isnan(cross_up_dcape))])
+    #Peak
+    cross_peak_sfc_p_mean=np.mean(cross_peak_sfc_p[np.logical_not(np.isnan(cross_peak_sfc_p))])
+    cross_peak_lcl_mean=np.mean(cross_peak_lcl[np.logical_not(np.isnan(cross_peak_lcl))])
+    cross_peak_lfc_mean=np.mean(cross_peak_lfc[np.logical_not(np.isnan(cross_peak_lfc))])
+    cross_peak_el_mean=np.mean(cross_peak_el[np.logical_not(np.isnan(cross_peak_el))])
+    cross_peak_h0_mean=np.mean(cross_peak_h0[np.logical_not(np.isnan(cross_peak_h0))])
+    cross_peak_h_neg20_mean=np.mean(cross_peak_h_neg20[np.logical_not(np.isnan(cross_peak_h_neg20))])
+    cross_peak_wbzh_mean=np.mean(cross_peak_wbzh[np.logical_not(np.isnan(cross_peak_wbzh))])
+    cross_peak_1km_srh_mean=np.mean(cross_peak_1km_srh[np.logical_not(np.isnan(cross_peak_1km_srh))])
+    cross_peak_3km_srh_mean=np.mean(cross_peak_3km_srh[np.logical_not(np.isnan(cross_peak_3km_srh))])
+    cross_peak_1km_shear_mean=np.mean(cross_peak_1km_shear[np.logical_not(np.isnan(cross_peak_1km_shear))])
+    cross_peak_3km_shear_mean=np.mean(cross_peak_3km_shear[np.logical_not(np.isnan(cross_peak_3km_shear))])
+    cross_peak_6km_shear_mean=np.mean(cross_peak_6km_shear[np.logical_not(np.isnan(cross_peak_6km_shear))])
+    cross_peak_sbcape_mean=np.mean(cross_peak_sbcape[np.logical_not(np.isnan(cross_peak_sbcape))])
+    cross_peak_mlcape_mean=np.mean(cross_peak_mlcape[np.logical_not(np.isnan(cross_peak_mlcape))])
+    cross_peak_mucape_mean=np.mean(cross_peak_mucape[np.logical_not(np.isnan(cross_peak_mucape))])
+    cross_peak_sbcin_mean=np.mean(cross_peak_sbcin[np.logical_not(np.isnan(cross_peak_sbcin))])
+    cross_peak_mlcin_mean=np.mean(cross_peak_mlcin[np.logical_not(np.isnan(cross_peak_mlcin))])
+    cross_peak_mucin_mean=np.mean(cross_peak_mucin[np.logical_not(np.isnan(cross_peak_mucin))])
+    cross_peak_stp_mean=np.mean(cross_peak_stp[np.logical_not(np.isnan(cross_peak_stp))])
+    cross_peak_scp_mean=np.mean(cross_peak_scp[np.logical_not(np.isnan(cross_peak_scp))])
+    cross_peak_1km_lapse_mean=np.mean(cross_peak_1km_lapse[np.logical_not(np.isnan(cross_peak_1km_lapse))])
+    cross_peak_2km_lapse_mean=np.mean(cross_peak_2km_lapse[np.logical_not(np.isnan(cross_peak_2km_lapse))])
+    cross_peak_3km_lapse_mean=np.mean(cross_peak_3km_lapse[np.logical_not(np.isnan(cross_peak_3km_lapse))])
+    cross_peak_6km_lapse_mean=np.mean(cross_peak_6km_lapse[np.logical_not(np.isnan(cross_peak_6km_lapse))])
+    cross_peak_mid_rh_mean=np.mean(cross_peak_mid_rh[np.logical_not(np.isnan(cross_peak_mid_rh))])
+    cross_peak_sherb_mean=np.mean(cross_peak_sherb[np.logical_not(np.isnan(cross_peak_sherb))])
+    cross_peak_sfc_theta_mean=np.mean(cross_peak_sfc_theta[np.logical_not(np.isnan(cross_peak_sfc_theta))])
+    cross_peak_ml_theta_mean=np.mean(cross_peak_ml_theta[np.logical_not(np.isnan(cross_peak_ml_theta))])
+    cross_peak_dcape_mean=np.mean(cross_peak_dcape[np.logical_not(np.isnan(cross_peak_dcape))])
+    #Downstream
+    cross_down_sfc_p_mean=np.mean(cross_down_sfc_p[np.logical_not(np.isnan(cross_down_sfc_p))])
+    cross_down_lcl_mean=np.mean(cross_down_lcl[np.logical_not(np.isnan(cross_down_lcl))])
+    cross_down_lfc_mean=np.mean(cross_down_lfc[np.logical_not(np.isnan(cross_down_lfc))])
+    cross_down_el_mean=np.mean(cross_down_el[np.logical_not(np.isnan(cross_down_el))])
+    cross_down_h0_mean=np.mean(cross_down_h0[np.logical_not(np.isnan(cross_down_h0))])
+    cross_down_h_neg20_mean=np.mean(cross_down_h_neg20[np.logical_not(np.isnan(cross_down_h_neg20))])
+    cross_down_wbzh_mean=np.mean(cross_down_wbzh[np.logical_not(np.isnan(cross_down_wbzh))])
+    cross_down_1km_srh_mean=np.mean(cross_down_1km_srh[np.logical_not(np.isnan(cross_down_1km_srh))])
+    cross_down_3km_srh_mean=np.mean(cross_down_3km_srh[np.logical_not(np.isnan(cross_down_3km_srh))])
+    cross_down_1km_shear_mean=np.mean(cross_down_1km_shear[np.logical_not(np.isnan(cross_down_1km_shear))])
+    cross_down_3km_shear_mean=np.mean(cross_down_3km_shear[np.logical_not(np.isnan(cross_down_3km_shear))])
+    cross_down_6km_shear_mean=np.mean(cross_down_6km_shear[np.logical_not(np.isnan(cross_down_6km_shear))])
+    cross_down_sbcape_mean=np.mean(cross_down_sbcape[np.logical_not(np.isnan(cross_down_sbcape))])
+    cross_down_mlcape_mean=np.mean(cross_down_mlcape[np.logical_not(np.isnan(cross_down_mlcape))])
+    cross_down_mucape_mean=np.mean(cross_down_mucape[np.logical_not(np.isnan(cross_down_mucape))])
+    cross_down_sbcin_mean=np.mean(cross_down_sbcin[np.logical_not(np.isnan(cross_down_sbcin))])
+    cross_down_mlcin_mean=np.mean(cross_down_mlcin[np.logical_not(np.isnan(cross_down_mlcin))])
+    cross_down_mucin_mean=np.mean(cross_down_mucin[np.logical_not(np.isnan(cross_down_mucin))])
+    cross_down_stp_mean=np.mean(cross_down_stp[np.logical_not(np.isnan(cross_down_stp))])
+    cross_down_scp_mean=np.mean(cross_down_scp[np.logical_not(np.isnan(cross_down_scp))])
+    cross_down_1km_lapse_mean=np.mean(cross_down_1km_lapse[np.logical_not(np.isnan(cross_down_1km_lapse))])
+    cross_down_2km_lapse_mean=np.mean(cross_down_2km_lapse[np.logical_not(np.isnan(cross_down_2km_lapse))])
+    cross_down_3km_lapse_mean=np.mean(cross_down_3km_lapse[np.logical_not(np.isnan(cross_down_3km_lapse))])
+    cross_down_6km_lapse_mean=np.mean(cross_down_6km_lapse[np.logical_not(np.isnan(cross_down_6km_lapse))])
+    cross_down_mid_rh_mean=np.mean(cross_down_mid_rh[np.logical_not(np.isnan(cross_down_mid_rh))])
+    cross_down_sherb_mean=np.mean(cross_down_sherb[np.logical_not(np.isnan(cross_down_sherb))])
+    cross_down_sfc_theta_mean=np.mean(cross_down_sfc_theta[np.logical_not(np.isnan(cross_down_sfc_theta))])
+    cross_down_ml_theta_mean=np.mean(cross_down_ml_theta[np.logical_not(np.isnan(cross_down_ml_theta))])
+    cross_down_dcape_mean=np.mean(cross_down_dcape[np.logical_not(np.isnan(cross_down_dcape))])
+
+    ##Non-crossers:
+    #upstream
+    non_up_sfc_p_mean=np.mean(non_up_sfc_p[np.logical_not(np.isnan(non_up_sfc_p))])
+    non_up_lcl_mean=np.mean(non_up_lcl[np.logical_not(np.isnan(non_up_lcl))])
+    non_up_lfc_mean=np.mean(non_up_lfc[np.logical_not(np.isnan(non_up_lfc))])
+    non_up_el_mean=np.mean(non_up_el[np.logical_not(np.isnan(non_up_el))])
+    non_up_h0_mean=np.mean(non_up_h0[np.logical_not(np.isnan(non_up_h0))])
+    non_up_h_neg20_mean=np.mean(non_up_h_neg20[np.logical_not(np.isnan(non_up_h_neg20))])
+    non_up_wbzh_mean=np.mean(non_up_wbzh[np.logical_not(np.isnan(non_up_wbzh))])
+    non_up_1km_srh_mean=np.mean(non_up_1km_srh[np.logical_not(np.isnan(non_up_1km_srh))])
+    non_up_3km_srh_mean=np.mean(non_up_3km_srh[np.logical_not(np.isnan(non_up_3km_srh))])
+    non_up_1km_shear_mean=np.mean(non_up_1km_shear[np.logical_not(np.isnan(non_up_1km_shear))])
+    non_up_3km_shear_mean=np.mean(non_up_3km_shear[np.logical_not(np.isnan(non_up_3km_shear))])
+    non_up_6km_shear_mean=np.mean(non_up_6km_shear[np.logical_not(np.isnan(non_up_6km_shear))])
+    non_up_sbcape_mean=np.mean(non_up_sbcape[np.logical_not(np.isnan(non_up_sbcape))])
+    non_up_mlcape_mean=np.mean(non_up_mlcape[np.logical_not(np.isnan(non_up_mlcape))])
+    non_up_mucape_mean=np.mean(non_up_mucape[np.logical_not(np.isnan(non_up_mucape))])
+    non_up_sbcin_mean=np.mean(non_up_sbcin[np.logical_not(np.isnan(non_up_sbcin))])
+    non_up_mlcin_mean=np.mean(non_up_mlcin[np.logical_not(np.isnan(non_up_mlcin))])
+    non_up_mucin_mean=np.mean(non_up_mucin[np.logical_not(np.isnan(non_up_mucin))])
+    non_up_stp_mean=np.mean(non_up_stp[np.logical_not(np.isnan(non_up_stp))])
+    non_up_scp_mean=np.mean(non_up_scp[np.logical_not(np.isnan(non_up_scp))])
+    non_up_1km_lapse_mean=np.mean(non_up_1km_lapse[np.logical_not(np.isnan(non_up_1km_lapse))])
+    non_up_2km_lapse_mean=np.mean(non_up_2km_lapse[np.logical_not(np.isnan(non_up_2km_lapse))])
+    non_up_3km_lapse_mean=np.mean(non_up_3km_lapse[np.logical_not(np.isnan(non_up_3km_lapse))])
+    non_up_6km_lapse_mean=np.mean(non_up_6km_lapse[np.logical_not(np.isnan(non_up_6km_lapse))])
+    non_up_mid_rh_mean=np.mean(non_up_mid_rh[np.logical_not(np.isnan(non_up_mid_rh))])
+    non_up_sherb_mean=np.mean(non_up_sherb[np.logical_not(np.isnan(non_up_sherb))])
+    non_up_sfc_theta_mean=np.mean(non_up_sfc_theta[np.logical_not(np.isnan(non_up_sfc_theta))])
+    non_up_ml_theta_mean=np.mean(non_up_ml_theta[np.logical_not(np.isnan(non_up_ml_theta))])
+    non_up_dcape_mean=np.mean(non_up_dcape[np.logical_not(np.isnan(non_up_dcape))])
+    #Peak
+    non_peak_sfc_p_mean=np.mean(non_peak_sfc_p[np.logical_not(np.isnan(non_peak_sfc_p))])
+    non_peak_lcl_mean=np.mean(non_peak_lcl[np.logical_not(np.isnan(non_peak_lcl))])
+    non_peak_lfc_mean=np.mean(non_peak_lfc[np.logical_not(np.isnan(non_peak_lfc))])
+    non_peak_el_mean=np.mean(non_peak_el[np.logical_not(np.isnan(non_peak_el))])
+    non_peak_h0_mean=np.mean(non_peak_h0[np.logical_not(np.isnan(non_peak_h0))])
+    non_peak_h_neg20_mean=np.mean(non_peak_h_neg20[np.logical_not(np.isnan(non_peak_h_neg20))])
+    non_peak_wbzh_mean=np.mean(non_peak_wbzh[np.logical_not(np.isnan(non_peak_wbzh))])
+    non_peak_1km_srh_mean=np.mean(non_peak_1km_srh[np.logical_not(np.isnan(non_peak_1km_srh))])
+    non_peak_3km_srh_mean=np.mean(non_peak_3km_srh[np.logical_not(np.isnan(non_peak_3km_srh))])
+    non_peak_1km_shear_mean=np.mean(non_peak_1km_shear[np.logical_not(np.isnan(non_peak_1km_shear))])
+    non_peak_3km_shear_mean=np.mean(non_peak_3km_shear[np.logical_not(np.isnan(non_peak_3km_shear))])
+    non_peak_6km_shear_mean=np.mean(non_peak_6km_shear[np.logical_not(np.isnan(non_peak_6km_shear))])
+    non_peak_sbcape_mean=np.mean(non_peak_sbcape[np.logical_not(np.isnan(non_peak_sbcape))])
+    non_peak_mlcape_mean=np.mean(non_peak_mlcape[np.logical_not(np.isnan(non_peak_mlcape))])
+    non_peak_mucape_mean=np.mean(non_peak_mucape[np.logical_not(np.isnan(non_peak_mucape))])
+    non_peak_sbcin_mean=np.mean(non_peak_sbcin[np.logical_not(np.isnan(non_peak_sbcin))])
+    non_peak_mlcin_mean=np.mean(non_peak_mlcin[np.logical_not(np.isnan(non_peak_mlcin))])
+    non_peak_mucin_mean=np.mean(non_peak_mucin[np.logical_not(np.isnan(non_peak_mucin))])
+    non_peak_stp_mean=np.mean(non_peak_stp[np.logical_not(np.isnan(non_peak_stp))])
+    non_peak_scp_mean=np.mean(non_peak_scp[np.logical_not(np.isnan(non_peak_scp))])
+    non_peak_1km_lapse_mean=np.mean(non_peak_1km_lapse[np.logical_not(np.isnan(non_peak_1km_lapse))])
+    non_peak_2km_lapse_mean=np.mean(non_peak_2km_lapse[np.logical_not(np.isnan(non_peak_2km_lapse))])
+    non_peak_3km_lapse_mean=np.mean(non_peak_3km_lapse[np.logical_not(np.isnan(non_peak_3km_lapse))])
+    non_peak_6km_lapse_mean=np.mean(non_peak_6km_lapse[np.logical_not(np.isnan(non_peak_6km_lapse))])
+    non_peak_mid_rh_mean=np.mean(non_peak_mid_rh[np.logical_not(np.isnan(non_peak_mid_rh))])
+    non_peak_sherb_mean=np.mean(non_peak_sherb[np.logical_not(np.isnan(non_peak_sherb))])
+    non_peak_sfc_theta_mean=np.mean(non_peak_sfc_theta[np.logical_not(np.isnan(non_peak_sfc_theta))])
+    non_peak_ml_theta_mean=np.mean(non_peak_ml_theta[np.logical_not(np.isnan(non_peak_ml_theta))])
+    non_peak_dcape_mean=np.mean(non_peak_dcape[np.logical_not(np.isnan(non_peak_dcape))])
+    #Downstream
+    non_down_sfc_p_mean=np.mean(non_down_sfc_p[np.logical_not(np.isnan(non_down_sfc_p))])
+    non_down_lcl_mean=np.mean(non_down_lcl[np.logical_not(np.isnan(non_down_lcl))])
+    non_down_lfc_mean=np.mean(non_down_lfc[np.logical_not(np.isnan(non_down_lfc))])
+    non_down_el_mean=np.mean(non_down_el[np.logical_not(np.isnan(non_down_el))])
+    non_down_h0_mean=np.mean(non_down_h0[np.logical_not(np.isnan(non_down_h0))])
+    non_down_h_neg20_mean=np.mean(non_down_h_neg20[np.logical_not(np.isnan(non_down_h_neg20))])
+    non_down_wbzh_mean=np.mean(non_down_wbzh[np.logical_not(np.isnan(non_down_wbzh))])
+    non_down_1km_srh_mean=np.mean(non_down_1km_srh[np.logical_not(np.isnan(non_down_1km_srh))])
+    non_down_3km_srh_mean=np.mean(non_down_3km_srh[np.logical_not(np.isnan(non_down_3km_srh))])
+    non_down_1km_shear_mean=np.mean(non_down_1km_shear[np.logical_not(np.isnan(non_down_1km_shear))])
+    non_down_3km_shear_mean=np.mean(non_down_3km_shear[np.logical_not(np.isnan(non_down_3km_shear))])
+    non_down_6km_shear_mean=np.mean(non_down_6km_shear[np.logical_not(np.isnan(non_down_6km_shear))])
+    non_down_sbcape_mean=np.mean(non_down_sbcape[np.logical_not(np.isnan(non_down_sbcape))])
+    non_down_mlcape_mean=np.mean(non_down_mlcape[np.logical_not(np.isnan(non_down_mlcape))])
+    non_down_mucape_mean=np.mean(non_down_mucape[np.logical_not(np.isnan(non_down_mucape))])
+    non_down_sbcin_mean=np.mean(non_down_sbcin[np.logical_not(np.isnan(non_down_sbcin))])
+    non_down_mlcin_mean=np.mean(non_down_mlcin[np.logical_not(np.isnan(non_down_mlcin))])
+    non_down_mucin_mean=np.mean(non_down_mucin[np.logical_not(np.isnan(non_down_mucin))])
+    non_down_stp_mean=np.mean(non_down_stp[np.logical_not(np.isnan(non_down_stp))])
+    non_down_scp_mean=np.mean(non_down_scp[np.logical_not(np.isnan(non_down_scp))])
+    non_down_1km_lapse_mean=np.mean(non_down_1km_lapse[np.logical_not(np.isnan(non_down_1km_lapse))])
+    non_down_2km_lapse_mean=np.mean(non_down_2km_lapse[np.logical_not(np.isnan(non_down_2km_lapse))])
+    non_down_3km_lapse_mean=np.mean(non_down_3km_lapse[np.logical_not(np.isnan(non_down_3km_lapse))])
+    non_down_6km_lapse_mean=np.mean(non_down_6km_lapse[np.logical_not(np.isnan(non_down_6km_lapse))])
+    non_down_mid_rh_mean=np.mean(non_down_mid_rh[np.logical_not(np.isnan(non_down_mid_rh))])
+    non_down_sherb_mean=np.mean(non_down_sherb[np.logical_not(np.isnan(non_down_sherb))])
+    non_down_sfc_theta_mean=np.mean(non_down_sfc_theta[np.logical_not(np.isnan(non_down_sfc_theta))])
+    non_down_ml_theta_mean=np.mean(non_down_ml_theta[np.logical_not(np.isnan(non_down_ml_theta))])
+    non_down_dcape_mean=np.mean(non_down_dcape[np.logical_not(np.isnan(non_down_dcape))])
+
+#Creating arrays to calculate the standard deviation of arrays 
+    ##Crossers: 
+    #upstream
+    cross_up_sfc_p_std=np.std(cross_up_sfc_p[np.logical_not(np.isnan(cross_up_sfc_p))])
+    cross_up_lcl_std=np.std(cross_up_lcl[np.logical_not(np.isnan(cross_up_lcl))])
+    cross_up_lfc_std=np.std(cross_up_lfc[np.logical_not(np.isnan(cross_up_lfc))])
+    cross_up_el_std=np.std(cross_up_el[np.logical_not(np.isnan(cross_up_el))])
+    cross_up_h0_std=np.std(cross_up_h0[np.logical_not(np.isnan(cross_up_h0))])
+    cross_up_h_neg20_std=np.std(cross_up_h_neg20[np.logical_not(np.isnan(cross_up_h_neg20))])
+    cross_up_wbzh_std=np.std(cross_up_wbzh[np.logical_not(np.isnan(cross_up_wbzh))])
+    cross_up_1km_srh_std=np.std(cross_up_1km_srh[np.logical_not(np.isnan(cross_up_1km_srh))])
+    cross_up_3km_srh_std=np.std(cross_up_3km_srh[np.logical_not(np.isnan(cross_up_3km_srh))])
+    cross_up_1km_shear_std=np.std(cross_up_1km_shear[np.logical_not(np.isnan(cross_up_1km_shear))])
+    cross_up_3km_shear_std=np.std(cross_up_3km_shear[np.logical_not(np.isnan(cross_up_3km_shear))])
+    cross_up_6km_shear_std=np.std(cross_up_6km_shear[np.logical_not(np.isnan(cross_up_6km_shear))])
+    cross_up_sbcape_std=np.std(cross_up_sbcape[np.logical_not(np.isnan(cross_up_sbcape))])
+    cross_up_mlcape_std=np.std(cross_up_mlcape[np.logical_not(np.isnan(cross_up_mlcape))])
+    cross_up_mucape_std=np.std(cross_up_mucape[np.logical_not(np.isnan(cross_up_mucape))])
+    cross_up_sbcin_std=np.std(cross_up_sbcin[np.logical_not(np.isnan(cross_up_sbcin))])
+    cross_up_mlcin_std=np.std(cross_up_mlcin[np.logical_not(np.isnan(cross_up_mlcin))])
+    cross_up_mucin_std=np.std(cross_up_mucin[np.logical_not(np.isnan(cross_up_mucin))])
+    cross_up_stp_std=np.std(cross_up_stp[np.logical_not(np.isnan(cross_up_stp))])
+    cross_up_scp_std=np.std(cross_up_scp[np.logical_not(np.isnan(cross_up_scp))])
+    cross_up_1km_lapse_std=np.std(cross_up_1km_lapse[np.logical_not(np.isnan(cross_up_1km_lapse))])
+    cross_up_2km_lapse_std=np.std(cross_up_2km_lapse[np.logical_not(np.isnan(cross_up_2km_lapse))])
+    cross_up_3km_lapse_std=np.std(cross_up_3km_lapse[np.logical_not(np.isnan(cross_up_3km_lapse))])
+    cross_up_6km_lapse_std=np.std(cross_up_6km_lapse[np.logical_not(np.isnan(cross_up_6km_lapse))])
+    cross_up_mid_rh_std=np.std(cross_up_mid_rh[np.logical_not(np.isnan(cross_up_mid_rh))])
+    cross_up_sherb_std=np.std(cross_up_sherb[np.logical_not(np.isnan(cross_up_sherb))])
+    cross_up_sfc_theta_std=np.std(cross_up_sfc_theta[np.logical_not(np.isnan(cross_up_sfc_theta))])
+    cross_up_ml_theta_std=np.std(cross_up_ml_theta[np.logical_not(np.isnan(cross_up_ml_theta))])
+    cross_up_dcape_std=np.std(cross_up_dcape[np.logical_not(np.isnan(cross_up_dcape))])
+    #Peak
+    cross_peak_sfc_p_std=np.std(cross_peak_sfc_p[np.logical_not(np.isnan(cross_peak_sfc_p))])
+    cross_peak_lcl_std=np.std(cross_peak_lcl[np.logical_not(np.isnan(cross_peak_lcl))])
+    cross_peak_lfc_std=np.std(cross_peak_lfc[np.logical_not(np.isnan(cross_peak_lfc))])
+    cross_peak_el_std=np.std(cross_peak_el[np.logical_not(np.isnan(cross_peak_el))])
+    cross_peak_h0_std=np.std(cross_peak_h0[np.logical_not(np.isnan(cross_peak_h0))])
+    cross_peak_h_neg20_std=np.std(cross_peak_h_neg20[np.logical_not(np.isnan(cross_peak_h_neg20))])
+    cross_peak_wbzh_std=np.std(cross_peak_wbzh[np.logical_not(np.isnan(cross_peak_wbzh))])
+    cross_peak_1km_srh_std=np.std(cross_peak_1km_srh[np.logical_not(np.isnan(cross_peak_1km_srh))])
+    cross_peak_3km_srh_std=np.std(cross_peak_3km_srh[np.logical_not(np.isnan(cross_peak_3km_srh))])
+    cross_peak_1km_shear_std=np.std(cross_peak_1km_shear[np.logical_not(np.isnan(cross_peak_1km_shear))])
+    cross_peak_3km_shear_std=np.std(cross_peak_3km_shear[np.logical_not(np.isnan(cross_peak_3km_shear))])
+    cross_peak_6km_shear_std=np.std(cross_peak_6km_shear[np.logical_not(np.isnan(cross_peak_6km_shear))])
+    cross_peak_sbcape_std=np.std(cross_peak_sbcape[np.logical_not(np.isnan(cross_peak_sbcape))])
+    cross_peak_mlcape_std=np.std(cross_peak_mlcape[np.logical_not(np.isnan(cross_peak_mlcape))])
+    cross_peak_mucape_std=np.std(cross_peak_mucape[np.logical_not(np.isnan(cross_peak_mucape))])
+    cross_peak_sbcin_std=np.std(cross_peak_sbcin[np.logical_not(np.isnan(cross_peak_sbcin))])
+    cross_peak_mlcin_std=np.std(cross_peak_mlcin[np.logical_not(np.isnan(cross_peak_mlcin))])
+    cross_peak_mucin_std=np.std(cross_peak_mucin[np.logical_not(np.isnan(cross_peak_mucin))])
+    cross_peak_stp_std=np.std(cross_peak_stp[np.logical_not(np.isnan(cross_peak_stp))])
+    cross_peak_scp_std=np.std(cross_peak_scp[np.logical_not(np.isnan(cross_peak_scp))])
+    cross_peak_1km_lapse_std=np.std(cross_peak_1km_lapse[np.logical_not(np.isnan(cross_peak_1km_lapse))])
+    cross_peak_2km_lapse_std=np.std(cross_peak_2km_lapse[np.logical_not(np.isnan(cross_peak_2km_lapse))])
+    cross_peak_3km_lapse_std=np.std(cross_peak_3km_lapse[np.logical_not(np.isnan(cross_peak_3km_lapse))])
+    cross_peak_6km_lapse_std=np.std(cross_peak_6km_lapse[np.logical_not(np.isnan(cross_peak_6km_lapse))])
+    cross_peak_mid_rh_std=np.std(cross_peak_mid_rh[np.logical_not(np.isnan(cross_peak_mid_rh))])
+    cross_peak_sherb_std=np.std(cross_peak_sherb[np.logical_not(np.isnan(cross_peak_sherb))])
+    cross_peak_sfc_theta_std=np.std(cross_peak_sfc_theta[np.logical_not(np.isnan(cross_peak_sfc_theta))])
+    cross_peak_ml_theta_std=np.std(cross_peak_ml_theta[np.logical_not(np.isnan(cross_peak_ml_theta))])
+    cross_peak_dcape_std=np.std(cross_peak_dcape[np.logical_not(np.isnan(cross_peak_dcape))])
+    #Downstream
+    cross_down_sfc_p_std=np.std(cross_down_sfc_p[np.logical_not(np.isnan(cross_down_sfc_p))])
+    cross_down_lcl_std=np.std(cross_down_lcl[np.logical_not(np.isnan(cross_down_lcl))])
+    cross_down_lfc_std=np.std(cross_down_lfc[np.logical_not(np.isnan(cross_down_lfc))])
+    cross_down_el_std=np.std(cross_down_el[np.logical_not(np.isnan(cross_down_el))])
+    cross_down_h0_std=np.std(cross_down_h0[np.logical_not(np.isnan(cross_down_h0))])
+    cross_down_h_neg20_std=np.std(cross_down_h_neg20[np.logical_not(np.isnan(cross_down_h_neg20))])
+    cross_down_wbzh_std=np.std(cross_down_wbzh[np.logical_not(np.isnan(cross_down_wbzh))])
+    cross_down_1km_srh_std=np.std(cross_down_1km_srh[np.logical_not(np.isnan(cross_down_1km_srh))])
+    cross_down_3km_srh_std=np.std(cross_down_3km_srh[np.logical_not(np.isnan(cross_down_3km_srh))])
+    cross_down_1km_shear_std=np.std(cross_down_1km_shear[np.logical_not(np.isnan(cross_down_1km_shear))])
+    cross_down_3km_shear_std=np.std(cross_down_3km_shear[np.logical_not(np.isnan(cross_down_3km_shear))])
+    cross_down_6km_shear_std=np.std(cross_down_6km_shear[np.logical_not(np.isnan(cross_down_6km_shear))])
+    cross_down_sbcape_std=np.std(cross_down_sbcape[np.logical_not(np.isnan(cross_down_sbcape))])
+    cross_down_mlcape_std=np.std(cross_down_mlcape[np.logical_not(np.isnan(cross_down_mlcape))])
+    cross_down_mucape_std=np.std(cross_down_mucape[np.logical_not(np.isnan(cross_down_mucape))])
+    cross_down_sbcin_std=np.std(cross_down_sbcin[np.logical_not(np.isnan(cross_down_sbcin))])
+    cross_down_mlcin_std=np.std(cross_down_mlcin[np.logical_not(np.isnan(cross_down_mlcin))])
+    cross_down_mucin_std=np.std(cross_down_mucin[np.logical_not(np.isnan(cross_down_mucin))])
+    cross_down_stp_std=np.std(cross_down_stp[np.logical_not(np.isnan(cross_down_stp))])
+    cross_down_scp_std=np.std(cross_down_scp[np.logical_not(np.isnan(cross_down_scp))])
+    cross_down_1km_lapse_std=np.std(cross_down_1km_lapse[np.logical_not(np.isnan(cross_down_1km_lapse))])
+    cross_down_2km_lapse_std=np.std(cross_down_2km_lapse[np.logical_not(np.isnan(cross_down_2km_lapse))])
+    cross_down_3km_lapse_std=np.std(cross_down_3km_lapse[np.logical_not(np.isnan(cross_down_3km_lapse))])
+    cross_down_6km_lapse_std=np.std(cross_down_6km_lapse[np.logical_not(np.isnan(cross_down_6km_lapse))])
+    cross_down_mid_rh_std=np.std(cross_down_mid_rh[np.logical_not(np.isnan(cross_down_mid_rh))])
+    cross_down_sherb_std=np.std(cross_down_sherb[np.logical_not(np.isnan(cross_down_sherb))])
+    cross_down_sfc_theta_std=np.std(cross_down_sfc_theta[np.logical_not(np.isnan(cross_down_sfc_theta))])
+    cross_down_ml_theta_std=np.std(cross_down_ml_theta[np.logical_not(np.isnan(cross_down_ml_theta))])
+    cross_down_dcape_std=np.std(cross_down_dcape[np.logical_not(np.isnan(cross_down_dcape))])
+
+    ##Non-crossers:
+    #upstream
+    non_up_sfc_p_std=np.std(non_up_sfc_p[np.logical_not(np.isnan(non_up_sfc_p))])
+    non_up_lcl_std=np.std(non_up_lcl[np.logical_not(np.isnan(non_up_lcl))])
+    non_up_lfc_std=np.std(non_up_lfc[np.logical_not(np.isnan(non_up_lfc))])
+    non_up_el_std=np.std(non_up_el[np.logical_not(np.isnan(non_up_el))])
+    non_up_h0_std=np.std(non_up_h0[np.logical_not(np.isnan(non_up_h0))])
+    non_up_h_neg20_std=np.std(non_up_h_neg20[np.logical_not(np.isnan(non_up_h_neg20))])
+    non_up_wbzh_std=np.std(non_up_wbzh[np.logical_not(np.isnan(non_up_wbzh))])
+    non_up_1km_srh_std=np.std(non_up_1km_srh[np.logical_not(np.isnan(non_up_1km_srh))])
+    non_up_3km_srh_std=np.std(non_up_3km_srh[np.logical_not(np.isnan(non_up_3km_srh))])
+    non_up_1km_shear_std=np.std(non_up_1km_shear[np.logical_not(np.isnan(non_up_1km_shear))])
+    non_up_3km_shear_std=np.std(non_up_3km_shear[np.logical_not(np.isnan(non_up_3km_shear))])
+    non_up_6km_shear_std=np.std(non_up_6km_shear[np.logical_not(np.isnan(non_up_6km_shear))])
+    non_up_sbcape_std=np.std(non_up_sbcape[np.logical_not(np.isnan(non_up_sbcape))])
+    non_up_mlcape_std=np.std(non_up_mlcape[np.logical_not(np.isnan(non_up_mlcape))])
+    non_up_mucape_std=np.std(non_up_mucape[np.logical_not(np.isnan(non_up_mucape))])
+    non_up_sbcin_std=np.std(non_up_sbcin[np.logical_not(np.isnan(non_up_sbcin))])
+    non_up_mlcin_std=np.std(non_up_mlcin[np.logical_not(np.isnan(non_up_mlcin))])
+    non_up_mucin_std=np.std(non_up_mucin[np.logical_not(np.isnan(non_up_mucin))])
+    non_up_stp_std=np.std(non_up_stp[np.logical_not(np.isnan(non_up_stp))])
+    non_up_scp_std=np.std(non_up_scp[np.logical_not(np.isnan(non_up_scp))])
+    non_up_1km_lapse_std=np.std(non_up_1km_lapse[np.logical_not(np.isnan(non_up_1km_lapse))])
+    non_up_2km_lapse_std=np.std(non_up_2km_lapse[np.logical_not(np.isnan(non_up_2km_lapse))])
+    non_up_3km_lapse_std=np.std(non_up_3km_lapse[np.logical_not(np.isnan(non_up_3km_lapse))])
+    non_up_6km_lapse_std=np.std(non_up_6km_lapse[np.logical_not(np.isnan(non_up_6km_lapse))])
+    non_up_mid_rh_std=np.std(non_up_mid_rh[np.logical_not(np.isnan(non_up_mid_rh))])
+    non_up_sherb_std=np.std(non_up_sherb[np.logical_not(np.isnan(non_up_sherb))])
+    non_up_sfc_theta_std=np.std(non_up_sfc_theta[np.logical_not(np.isnan(non_up_sfc_theta))])
+    non_up_ml_theta_std=np.std(non_up_ml_theta[np.logical_not(np.isnan(non_up_ml_theta))])
+    non_up_dcape_std=np.std(non_up_dcape[np.logical_not(np.isnan(non_up_dcape))])
+    #Peak
+    non_peak_sfc_p_std=np.std(non_peak_sfc_p[np.logical_not(np.isnan(non_peak_sfc_p))])
+    non_peak_lcl_std=np.std(non_peak_lcl[np.logical_not(np.isnan(non_peak_lcl))])
+    non_peak_lfc_std=np.std(non_peak_lfc[np.logical_not(np.isnan(non_peak_lfc))])
+    non_peak_el_std=np.std(non_peak_el[np.logical_not(np.isnan(non_peak_el))])
+    non_peak_h0_std=np.std(non_peak_h0[np.logical_not(np.isnan(non_peak_h0))])
+    non_peak_h_neg20_std=np.std(non_peak_h_neg20[np.logical_not(np.isnan(non_peak_h_neg20))])
+    non_peak_wbzh_std=np.std(non_peak_wbzh[np.logical_not(np.isnan(non_peak_wbzh))])
+    non_peak_1km_srh_std=np.std(non_peak_1km_srh[np.logical_not(np.isnan(non_peak_1km_srh))])
+    non_peak_3km_srh_std=np.std(non_peak_3km_srh[np.logical_not(np.isnan(non_peak_3km_srh))])
+    non_peak_1km_shear_std=np.std(non_peak_1km_shear[np.logical_not(np.isnan(non_peak_1km_shear))])
+    non_peak_3km_shear_std=np.std(non_peak_3km_shear[np.logical_not(np.isnan(non_peak_3km_shear))])
+    non_peak_6km_shear_std=np.std(non_peak_6km_shear[np.logical_not(np.isnan(non_peak_6km_shear))])
+    non_peak_sbcape_std=np.std(non_peak_sbcape[np.logical_not(np.isnan(non_peak_sbcape))])
+    non_peak_mlcape_std=np.std(non_peak_mlcape[np.logical_not(np.isnan(non_peak_mlcape))])
+    non_peak_mucape_std=np.std(non_peak_mucape[np.logical_not(np.isnan(non_peak_mucape))])
+    non_peak_sbcin_std=np.std(non_peak_sbcin[np.logical_not(np.isnan(non_peak_sbcin))])
+    non_peak_mlcin_std=np.std(non_peak_mlcin[np.logical_not(np.isnan(non_peak_mlcin))])
+    non_peak_mucin_std=np.std(non_peak_mucin[np.logical_not(np.isnan(non_peak_mucin))])
+    non_peak_stp_std=np.std(non_peak_stp[np.logical_not(np.isnan(non_peak_stp))])
+    non_peak_scp_std=np.std(non_peak_scp[np.logical_not(np.isnan(non_peak_scp))])
+    non_peak_1km_lapse_std=np.std(non_peak_1km_lapse[np.logical_not(np.isnan(non_peak_1km_lapse))])
+    non_peak_2km_lapse_std=np.std(non_peak_2km_lapse[np.logical_not(np.isnan(non_peak_2km_lapse))])
+    non_peak_3km_lapse_std=np.std(non_peak_3km_lapse[np.logical_not(np.isnan(non_peak_3km_lapse))])
+    non_peak_6km_lapse_std=np.std(non_peak_6km_lapse[np.logical_not(np.isnan(non_peak_6km_lapse))])
+    non_peak_mid_rh_std=np.std(non_peak_mid_rh[np.logical_not(np.isnan(non_peak_mid_rh))])
+    non_peak_sherb_std=np.std(non_peak_sherb[np.logical_not(np.isnan(non_peak_sherb))])
+    non_peak_sfc_theta_std=np.std(non_peak_sfc_theta[np.logical_not(np.isnan(non_peak_sfc_theta))])
+    non_peak_ml_theta_std=np.std(non_peak_ml_theta[np.logical_not(np.isnan(non_peak_ml_theta))])
+    non_peak_dcape_std=np.std(non_peak_dcape[np.logical_not(np.isnan(non_peak_dcape))])
+    #Downstream
+    non_down_sfc_p_std=np.std(non_down_sfc_p[np.logical_not(np.isnan(non_down_sfc_p))])
+    non_down_lcl_std=np.std(non_down_lcl[np.logical_not(np.isnan(non_down_lcl))])
+    non_down_lfc_std=np.std(non_down_lfc[np.logical_not(np.isnan(non_down_lfc))])
+    non_down_el_std=np.std(non_down_el[np.logical_not(np.isnan(non_down_el))])
+    non_down_h0_std=np.std(non_down_h0[np.logical_not(np.isnan(non_down_h0))])
+    non_down_h_neg20_std=np.std(non_down_h_neg20[np.logical_not(np.isnan(non_down_h_neg20))])
+    non_down_wbzh_std=np.std(non_down_wbzh[np.logical_not(np.isnan(non_down_wbzh))])
+    non_down_1km_srh_std=np.std(non_down_1km_srh[np.logical_not(np.isnan(non_down_1km_srh))])
+    non_down_3km_srh_std=np.std(non_down_3km_srh[np.logical_not(np.isnan(non_down_3km_srh))])
+    non_down_1km_shear_std=np.std(non_down_1km_shear[np.logical_not(np.isnan(non_down_1km_shear))])
+    non_down_3km_shear_std=np.std(non_down_3km_shear[np.logical_not(np.isnan(non_down_3km_shear))])
+    non_down_6km_shear_std=np.std(non_down_6km_shear[np.logical_not(np.isnan(non_down_6km_shear))])
+    non_down_sbcape_std=np.std(non_down_sbcape[np.logical_not(np.isnan(non_down_sbcape))])
+    non_down_mlcape_std=np.std(non_down_mlcape[np.logical_not(np.isnan(non_down_mlcape))])
+    non_down_mucape_std=np.std(non_down_mucape[np.logical_not(np.isnan(non_down_mucape))])
+    non_down_sbcin_std=np.std(non_down_sbcin[np.logical_not(np.isnan(non_down_sbcin))])
+    non_down_mlcin_std=np.std(non_down_mlcin[np.logical_not(np.isnan(non_down_mlcin))])
+    non_down_mucin_std=np.std(non_down_mucin[np.logical_not(np.isnan(non_down_mucin))])
+    non_down_stp_std=np.std(non_down_stp[np.logical_not(np.isnan(non_down_stp))])
+    non_down_scp_std=np.std(non_down_scp[np.logical_not(np.isnan(non_down_scp))])
+    non_down_1km_lapse_std=np.std(non_down_1km_lapse[np.logical_not(np.isnan(non_down_1km_lapse))])
+    non_down_2km_lapse_std=np.std(non_down_2km_lapse[np.logical_not(np.isnan(non_down_2km_lapse))])
+    non_down_3km_lapse_std=np.std(non_down_3km_lapse[np.logical_not(np.isnan(non_down_3km_lapse))])
+    non_down_6km_lapse_std=np.std(non_down_6km_lapse[np.logical_not(np.isnan(non_down_6km_lapse))])
+    non_down_mid_rh_std=np.std(non_down_mid_rh[np.logical_not(np.isnan(non_down_mid_rh))])
+    non_down_sherb_std=np.std(non_down_sherb[np.logical_not(np.isnan(non_down_sherb))])
+    non_down_sfc_theta_std=np.std(non_down_sfc_theta[np.logical_not(np.isnan(non_down_sfc_theta))])
+    non_down_ml_theta_std=np.std(non_down_ml_theta[np.logical_not(np.isnan(non_down_ml_theta))])
+    non_down_dcape_std=np.std(non_down_dcape[np.logical_not(np.isnan(non_down_dcape))])
+
+    
+    ##prints value for normality
+
+    print('Up Cross:')
+    up_lcl_ks,up_lcl_pvalue=(stats.kstest(cross_up_lcl[np.isfinite(cross_up_lcl)],'norm',args=(cross_up_lcl_mean,
+                                                                                              cross_up_lcl_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_lcl)
+   # plt.title('Up Cross LCL')
+    print('Cross LCL:', up_lcl_ks,up_lcl_pvalue)
+    
+    up_lfc_ks,up_lfc_pvalue=(stats.kstest(cross_up_lfc[np.isfinite(cross_up_lfc)],'norm',args=(cross_up_lfc_mean,
+                                                                                              cross_up_lfc_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_lfc)
+   # plt.title('Up Cross LFC')
+    print('Cross LFC:', up_lfc_ks,up_lfc_pvalue)
+
+    up_el_ks,up_el_pvalue=(stats.kstest(cross_up_el[np.isfinite(cross_up_el)],'norm',args=(cross_up_el_mean,
+                                                                                              cross_up_el_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_el)
+   # plt.title('Up EL')
+    print('EL:', up_el_ks,up_el_pvalue)
+    
+    up_h0_ks,up_h0_pvalue=(stats.kstest(cross_up_h0[np.isfinite(cross_up_h0)],'norm',args=(cross_up_h0_mean,
+                                                                                              cross_up_h0_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_h0)
+   # plt.title('Up Cross 0 deg height')
+    print('Cross 0 deg height:',up_h0_ks,up_h0_pvalue)
+    
+    up_h_neg20_ks,up_h_neg20_pvalue=(stats.kstest(cross_up_h_neg20[np.isfinite(cross_up_h_neg20)],'norm',args=(cross_up_h_neg20_mean,
+                                                                                              cross_up_h_neg20_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_h_neg20)
+   # plt.title('Up Cross -20 deg height')
+    print('Cross -20 deg height:',up_h_neg20_ks,up_h_neg20_pvalue)
+    
+    up_wbzh_ks,up_wbzh_pvalue=(stats.kstest(cross_up_wbzh[np.isfinite(cross_up_wbzh)],'norm',args=(cross_up_wbzh_mean,
+                                                                                              cross_up_wbzh_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_wbzh)
+   # plt.title('Up Cross WBZH')
+    print('Cross WBZH:',up_wbzh_ks,up_wbzh_pvalue)
+    
+    up_1km_srh_ks,up_1km_srh_pvalue=(stats.kstest(cross_up_1km_srh[np.isfinite(cross_up_1km_srh)],'norm',args=(cross_up_1km_srh_mean,
+                                                                                              cross_up_1km_srh_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_1km_srh)
+   # plt.title('Up Cross 1km SRH')
+    print('Cross 1km SRH:',up_1km_srh_ks,up_1km_srh_pvalue)
+    
+    up_3km_srh_ks,up_3km_srh_pvalue=(stats.kstest(cross_up_3km_srh[np.isfinite(cross_up_3km_srh)],'norm',args=(cross_up_3km_srh_mean,
+                                                                                              cross_up_3km_srh_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_3km_srh)
+   # plt.title('Up Cross 3km SRH')
+    print('Cross 3km SRH:',up_3km_srh_ks,up_3km_srh_pvalue)
+    
+    up_1km_shear_ks,up_1km_shear_pvalue=(stats.kstest(cross_up_1km_shear[np.isfinite(cross_up_1km_shear)],'norm',args=(cross_up_1km_shear_mean,
+                                                                                              cross_up_1km_shear_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_1km_shear)
+   # plt.title('Up Cross 1km SHEAR')
+    print('Cross 1km SHEAR:',up_1km_shear_ks,up_1km_shear_pvalue)
+
+
+    up_3km_shear_ks,up_3km_shear_pvalue=(stats.kstest(cross_up_3km_shear[np.isfinite(cross_up_3km_shear)],'norm',args=(cross_up_3km_shear_mean,
+                                                                                              cross_up_3km_shear_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_3km_shear)
+   # plt.title('Up Cross 3km SHEAR')
+    print('Cross 3km SHEAR:',up_3km_shear_ks,up_3km_shear_pvalue)
+    
+    up_6km_shear_ks,up_6km_shear_pvalue=(stats.kstest(cross_up_6km_shear[np.isfinite(cross_up_6km_shear)],'norm',args=(cross_up_6km_shear_mean,
+                                                                                              cross_up_6km_shear_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_6km_shear)
+   # plt.title('Up Cross 6km SHEAR')
+    print('Cross 6km SHEAR:',up_6km_shear_ks,up_6km_shear_pvalue)
+    
+    up_sbcape_ks,up_sbcape_pvalue=(stats.kstest(cross_up_sbcape[np.isfinite(cross_up_sbcape)],'norm',args=(cross_up_sbcape_mean,
+                                                                                              cross_up_sbcape_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_sbcape)
+   # plt.title('Up Cross SBCAPE')
+    print('Cross SBCAPE:',up_sbcape_ks,up_sbcape_pvalue)
+    
+    up_mlcape_ks,up_mlcape_pvalue=(stats.kstest(cross_up_mlcape[np.isfinite(cross_up_mlcape)],'norm',args=(cross_up_mlcape_mean,
+                                                                                              cross_up_mlcape_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_mlcape)
+   # plt.title('Up Cross MLCAPE')
+    print('Cross MLCAPE:',up_mlcape_ks,up_mlcape_pvalue)
+    
+    up_mucape_ks,up_mucape_pvalue=(stats.kstest(cross_up_mucape[np.isfinite(cross_up_mucape)],'norm',args=(cross_up_mucape_mean,
+                                                                                              cross_up_mucape_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_mucape)
+   # plt.title('Up Cross MUCAPE')
+    print('Cross MUCAPE:',up_mucape_ks,up_mucape_pvalue)
+
+    up_stp_ks,up_stp_pvalue=(stats.kstest(cross_up_stp[np.isfinite(cross_up_stp)],'norm',args=(cross_up_stp_mean,
+                                                                                              cross_up_stp_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_stp)
+   # plt.title('Up Cross STP')
+    print('Cross STP:',up_stp_ks,up_stp_pvalue)
+
+    up_scp_ks,up_scp_pvalue=(stats.kstest(cross_up_scp[np.isfinite(cross_up_scp)],'norm',args=(cross_up_scp_mean,
+                                                                                              cross_up_scp_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_scp)
+   # plt.title('Up Cross SCP')
+    print('Cross SCP:',up_scp_ks,up_scp_pvalue)
+
+    up_sherb_ks,up_sherb_pvalue=(stats.kstest(cross_up_sherb[np.isfinite(cross_up_sherb)],'norm',args=(cross_up_sherb_mean,
+                                                                                              cross_up_sherb_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_sherb)
+   # plt.title('Up Cross SHERB')
+    print('Cross SHERB:',up_sherb_ks,up_sherb_pvalue)
+
+    up_1km_lapse_ks,up_1km_lapse_pvalue=(stats.kstest(cross_up_1km_lapse[np.isfinite(cross_up_1km_lapse)],'norm',args=(cross_up_1km_lapse_mean,
+                                                                                              cross_up_1km_lapse_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_1km_lapse)
+   # plt.title('Up Cross 1KM_LAPSE')
+    print('Cross 1KM_LAPSE:',up_1km_lapse_ks,up_1km_lapse_pvalue)
+
+    up_1km_lapse_ks,up_1km_lapse_pvalue=(stats.kstest(cross_up_1km_lapse[np.isfinite(cross_up_1km_lapse)],'norm',args=(cross_up_1km_lapse_mean,
+                                                                                              cross_up_1km_lapse_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_1km_lapse)
+   # plt.title('Up Cross 1KM_LAPSE')
+    print('Cross 1KM_LAPSE:',up_1km_lapse_ks,up_1km_lapse_pvalue)
+    
+    up_2km_lapse_ks,up_2km_lapse_pvalue=(stats.kstest(cross_up_2km_lapse[np.isfinite(cross_up_2km_lapse)],'norm',args=(cross_up_2km_lapse_mean,
+                                                                                              cross_up_2km_lapse_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_2km_lapse)
+   # plt.title('Up Cross 2KM_LAPSE')
+    print('Cross 2KM_LAPSE:',up_2km_lapse_ks,up_2km_lapse_pvalue)
+
+    up_3km_lapse_ks,up_3km_lapse_pvalue=(stats.kstest(cross_up_3km_lapse[np.isfinite(cross_up_3km_lapse)],'norm',args=(cross_up_3km_lapse_mean,
+                                                                                              cross_up_3km_lapse_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_3km_lapse)
+   # plt.title('Cross 3KM_LAPSE')
+    print('Cross 3KM_LAPSE:',up_3km_lapse_ks,up_3km_lapse_pvalue)
+    
+    up_6km_lapse_ks,up_6km_lapse_pvalue=(stats.kstest(cross_up_6km_lapse[np.isfinite(cross_up_6km_lapse)],'norm',args=(cross_up_6km_lapse_mean,
+                                                                                              cross_up_6km_lapse_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_6km_lapse)
+   # plt.title('Up Cross 6KM_LAPSE')
+    print('Cross 6KM_LAPSE:',up_6km_lapse_ks,up_6km_lapse_pvalue)
+
+    up_mid_rh_ks,up_mid_rh_pvalue=(stats.kstest(cross_up_mid_rh[np.isfinite(cross_up_mid_rh)],'norm',args=(cross_up_mid_rh_mean,
+                                                                                              cross_up_mid_rh_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_mid_rh)
+   # plt.title('Up Cross mid_rh')
+    print('Cross mid_rh:',up_mid_rh_ks,up_mid_rh_pvalue)
+
+    up_sfc_theta_ks,up_sfc_theta_pvalue=(stats.kstest(cross_up_sfc_theta[np.isfinite(cross_up_sfc_theta)],'norm',args=(cross_up_sfc_theta_mean,
+                                                                                              cross_up_sfc_theta_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_sfc_theta)
+   # plt.title('Up Cross  sfc_theta')
+    print('Cross sfc_theta:',up_sfc_theta_ks,up_sfc_theta_pvalue)
+
+    up_ml_theta_ks,up_ml_theta_pvalue=(stats.kstest(cross_up_ml_theta[np.isfinite(cross_up_ml_theta)],'norm',args=(cross_up_ml_theta_mean,
+                                                                                              cross_up_ml_theta_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(cross_up_ml_theta)
+   # plt.title('Up Cross ml_theta')
+    print('Cross ml_theta:',up_ml_theta_ks,up_ml_theta_pvalue)
+    
+    up_dcape_ks,up_dcape_pvalue=(stats.kstest(cross_up_dcape[np.isfinite(cross_up_dcape)],'norm',args=(cross_up_dcape_mean,
+                                                                                              cross_up_dcape_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(cross_up_dcape)
+    #plt.title('Up Cross dcape')
+    print('Cross dcape:',up_dcape_ks,up_dcape_pvalue)
+    print()
+
+    print('Up Non:')
+    up_lcl_ks,up_lcl_pvalue=(stats.kstest(non_up_lcl[np.isfinite(non_up_lcl)],'norm',args=(non_up_lcl_mean,
+                                                                                              non_up_lcl_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(non_up_lcl)
+   # plt.title('Up Non LCL')
+    print('Non LCL:', up_lcl_ks,up_lcl_pvalue)
+    
+    up_lfc_ks,up_lfc_pvalue=(stats.kstest(non_up_lfc[np.isfinite(non_up_lfc)],'norm',args=(non_up_lfc_mean,
+                                                                                              non_up_lfc_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_lfc)
+    #plt.title('Up Non LFC')
+    print('Non LFC:', up_lfc_ks,up_lfc_pvalue)
+
+    up_el_ks,up_el_pvalue=(stats.kstest(non_up_el[np.isfinite(non_up_el)],'norm',args=(non_up_el_mean,
+                                                                                              non_up_el_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_el)
+    #plt.title('Up EL')
+    print('EL:', up_el_ks,up_el_pvalue)
+    
+    up_h0_ks,up_h0_pvalue=(stats.kstest(non_up_h0[np.isfinite(non_up_h0)],'norm',args=(non_up_h0_mean,
+                                                                                              non_up_h0_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_h0)
+    #plt.title('Up Non 0 deg height')
+    print('Non 0 deg height:',up_h0_ks,up_h0_pvalue)
+    
+    up_h_neg20_ks,up_h_neg20_pvalue=(stats.kstest(non_up_h_neg20[np.isfinite(non_up_h_neg20)],'norm',args=(non_up_h_neg20_mean,
+                                                                                              non_up_h_neg20_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_h_neg20)
+    #plt.title('Up Non -20 deg height')
+    print('Non -20 deg height:',up_h_neg20_ks,up_h_neg20_pvalue)
+    
+    up_wbzh_ks,up_wbzh_pvalue=(stats.kstest(non_up_wbzh[np.isfinite(non_up_wbzh)],'norm',args=(non_up_wbzh_mean,
+                                                                                              non_up_wbzh_std)))
+   # fig=plt.figure(figsize=(5,5))
+   # plt.hist(non_up_wbzh)
+   # plt.title('Up Non WBZH')
+    print('Non WBZH:',up_wbzh_ks,up_wbzh_pvalue)
+    
+    up_1km_srh_ks,up_1km_srh_pvalue=(stats.kstest(non_up_1km_srh[np.isfinite(non_up_1km_srh)],'norm',args=(non_up_1km_srh_mean,
+                                                                                              non_up_1km_srh_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_1km_srh)
+    #plt.title('Up Non 1km SRH')
+    print('Non 1km SRH:',up_1km_srh_ks,up_1km_srh_pvalue)
+    
+    up_3km_srh_ks,up_3km_srh_pvalue=(stats.kstest(non_up_3km_srh[np.isfinite(non_up_3km_srh)],'norm',args=(non_up_3km_srh_mean,
+                                                                                              non_up_3km_srh_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_3km_srh)
+    #plt.title('Up Non 3km SRH')
+    print('Non 3km SRH:',up_3km_srh_ks,up_3km_srh_pvalue)
+    
+    up_1km_shear_ks,up_1km_shear_pvalue=(stats.kstest(non_up_1km_shear[np.isfinite(non_up_1km_shear)],'norm',args=(non_up_1km_shear_mean,
+                                                                                              non_up_1km_shear_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_1km_shear)
+    #plt.title('Up Non 1km SHEAR')
+    print('Non 1km SHEAR:',up_1km_shear_ks,up_1km_shear_pvalue)
+
+
+    up_3km_shear_ks,up_3km_shear_pvalue=(stats.kstest(non_up_3km_shear[np.isfinite(non_up_3km_shear)],'norm',args=(non_up_3km_shear_mean,
+                                                                                              non_up_3km_shear_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_3km_shear)
+    #plt.title('Up Non 3km SHEAR')
+    print('Non 3km SHEAR:',up_3km_shear_ks,up_3km_shear_pvalue)
+    
+    up_6km_shear_ks,up_6km_shear_pvalue=(stats.kstest(non_up_6km_shear[np.isfinite(non_up_6km_shear)],'norm',args=(non_up_6km_shear_mean,
+                                                                                              non_up_6km_shear_std)))
+    #fig=plt.figure(figsize=(5,5))
+    #plt.hist(non_up_6km_shear)
+   # plt.title('Up Non 6km SHEAR')
+    print('Non 6km SHEAR:',up_6km_shear_ks,up_6km_shear_pvalue)
+    
+    up_sbcape_ks,up_sbcape_pvalue=(stats.kstest(non_up_sbcape[np.isfinite(non_up_sbcape)],'norm',args=(non_up_sbcape_mean,
+                                                                                              non_up_sbcape_std)))
+    print('Non SBCAPE:',up_sbcape_ks,up_sbcape_pvalue)
+    
+    up_mlcape_ks,up_mlcape_pvalue=(stats.kstest(non_up_mlcape[np.isfinite(non_up_mlcape)],'norm',args=(non_up_mlcape_mean,
+                                                                                              non_up_mlcape_std)))
+    print('Non MLCAPE:',up_mlcape_ks,up_mlcape_pvalue)
+    
+    up_mucape_ks,up_mucape_pvalue=(stats.kstest(non_up_mucape[np.isfinite(non_up_mucape)],'norm',args=(non_up_mucape_mean,
+                                                                                              non_up_mucape_std)))
+    print('Non MUCAPE:',up_mucape_ks,up_mucape_pvalue)
+
+    up_stp_ks,up_stp_pvalue=(stats.kstest(non_up_stp[np.isfinite(non_up_stp)],'norm',args=(non_up_stp_mean,
+                                                                                              non_up_stp_std)))
+    print('Non STP:',up_stp_ks,up_stp_pvalue)
+
+    up_scp_ks,up_scp_pvalue=(stats.kstest(non_up_scp[np.isfinite(non_up_scp)],'norm',args=(non_up_scp_mean,
+                                                                                              non_up_scp_std)))
+    print('Non SCP:',up_scp_ks,up_scp_pvalue)
+
+    up_sherb_ks,up_sherb_pvalue=(stats.kstest(non_up_sherb[np.isfinite(non_up_sherb)],'norm',args=(non_up_sherb_mean,
+                                                                                              non_up_sherb_std)))
+    print('Non SHERB:',up_sherb_ks,up_sherb_pvalue)
+
+    up_1km_lapse_ks,up_1km_lapse_pvalue=(stats.kstest(non_up_1km_lapse[np.isfinite(non_up_1km_lapse)],'norm',args=(non_up_1km_lapse_mean,
+                                                                                              non_up_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',up_1km_lapse_ks,up_1km_lapse_pvalue)
+
+    up_1km_lapse_ks,up_1km_lapse_pvalue=(stats.kstest(non_up_1km_lapse[np.isfinite(non_up_1km_lapse)],'norm',args=(non_up_1km_lapse_mean,
+                                                                                              non_up_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',up_1km_lapse_ks,up_1km_lapse_pvalue)
+    
+    up_2km_lapse_ks,up_2km_lapse_pvalue=(stats.kstest(non_up_2km_lapse[np.isfinite(non_up_2km_lapse)],'norm',args=(non_up_2km_lapse_mean,
+                                                                                              non_up_2km_lapse_std)))
+    print('Non 2KM_LAPSE:',up_2km_lapse_ks,up_2km_lapse_pvalue)
+
+    up_3km_lapse_ks,up_3km_lapse_pvalue=(stats.kstest(non_up_3km_lapse[np.isfinite(non_up_3km_lapse)],'norm',args=(non_up_3km_lapse_mean,
+                                                                                              non_up_3km_lapse_std)))
+    print('Non 3KM_LAPSE:',up_3km_lapse_ks,up_3km_lapse_pvalue)
+    
+    up_6km_lapse_ks,up_6km_lapse_pvalue=(stats.kstest(non_up_6km_lapse[np.isfinite(non_up_6km_lapse)],'norm',args=(non_up_6km_lapse_mean,
+                                                                                              non_up_6km_lapse_std)))
+    print('Non 6KM_LAPSE:',up_6km_lapse_ks,up_6km_lapse_pvalue)
+
+    up_mid_rh_ks,up_mid_rh_pvalue=(stats.kstest(non_up_mid_rh[np.isfinite(non_up_mid_rh)],'norm',args=(non_up_mid_rh_mean,
+                                                                                              non_up_mid_rh_std)))
+    print('Non mid_rh:',up_mid_rh_ks,up_mid_rh_pvalue)
+
+    up_sfc_theta_ks,up_sfc_theta_pvalue=(stats.kstest(non_up_sfc_theta[np.isfinite(non_up_sfc_theta)],'norm',args=(non_up_sfc_theta_mean,
+                                                                                              non_up_sfc_theta_std)))
+    print('Non sfc_theta:',up_sfc_theta_ks,up_sfc_theta_pvalue)
+
+    up_ml_theta_ks,up_ml_theta_pvalue=(stats.kstest(non_up_ml_theta[np.isfinite(non_up_ml_theta)],'norm',args=(non_up_ml_theta_mean,
+                                                                                              non_up_ml_theta_std)))
+    print('Non ml_theta:',up_ml_theta_ks,up_ml_theta_pvalue)
+    
+    up_dcape_ks,up_dcape_pvalue=(stats.kstest(non_up_dcape[np.isfinite(non_up_dcape)],'norm',args=(non_up_dcape_mean,
+                                                                                              non_up_dcape_std)))
+    print('Non dcape:',up_dcape_ks,up_dcape_pvalue)
+    print()
+
+
+    print('Peak Cross:')
+    peak_lcl_ks,peak_lcl_pvalue=(stats.kstest(cross_peak_lcl[np.isfinite(cross_peak_lcl)],'norm',args=(cross_peak_lcl_mean,
+                                                                                              cross_peak_lcl_std)))
+    print('Cross LCL:', peak_lcl_ks,peak_lcl_pvalue)
+    
+    peak_lfc_ks,peak_lfc_pvalue=(stats.kstest(cross_peak_lfc[np.isfinite(cross_peak_lfc)],'norm',args=(cross_peak_lfc_mean,
+                                                                                              cross_peak_lfc_std)))
+    print('Cross LFC:', peak_lfc_ks,peak_lfc_pvalue)
+
+    peak_el_ks,peak_el_pvalue=(stats.kstest(cross_peak_el[np.isfinite(cross_peak_el)],'norm',args=(cross_peak_el_mean,
+                                                                                              cross_peak_el_std)))
+    print('EL:', peak_el_ks,peak_el_pvalue)
+    
+    peak_h0_ks,peak_h0_pvalue=(stats.kstest(cross_peak_h0[np.isfinite(cross_peak_h0)],'norm',args=(cross_peak_h0_mean,
+                                                                                              cross_peak_h0_std)))
+    print('Cross 0 deg height:',peak_h0_ks,peak_h0_pvalue)
+    
+    peak_h_neg20_ks,peak_h_neg20_pvalue=(stats.kstest(cross_peak_h_neg20[np.isfinite(cross_peak_h_neg20)],'norm',args=(cross_peak_h_neg20_mean,
+                                                                                              cross_peak_h_neg20_std)))
+    print('Cross -20 deg height:',peak_h_neg20_ks,peak_h_neg20_pvalue)
+    
+    peak_wbzh_ks,peak_wbzh_pvalue=(stats.kstest(cross_peak_wbzh[np.isfinite(cross_peak_wbzh)],'norm',args=(cross_peak_wbzh_mean,
+                                                                                              cross_peak_wbzh_std)))
+    print('Cross WBZH:',peak_wbzh_ks,peak_wbzh_pvalue)
+    
+    peak_1km_srh_ks,peak_1km_srh_pvalue=(stats.kstest(cross_peak_1km_srh[np.isfinite(cross_peak_1km_srh)],'norm',args=(cross_peak_1km_srh_mean,
+                                                                                              cross_peak_1km_srh_std)))
+    print('Cross 1km SRH:',peak_1km_srh_ks,peak_1km_srh_pvalue)
+    
+    peak_3km_srh_ks,peak_3km_srh_pvalue=(stats.kstest(cross_peak_3km_srh[np.isfinite(cross_peak_3km_srh)],'norm',args=(cross_peak_3km_srh_mean,
+                                                                                              cross_peak_3km_srh_std)))
+    print('Cross 3km SRH:',peak_3km_srh_ks,peak_3km_srh_pvalue)
+    
+    peak_1km_shear_ks,peak_1km_shear_pvalue=(stats.kstest(cross_peak_1km_shear[np.isfinite(cross_peak_1km_shear)],'norm',args=(cross_peak_1km_shear_mean,
+                                                                                              cross_peak_1km_shear_std)))
+    print('Cross 1km SHEAR:',peak_1km_shear_ks,peak_1km_shear_pvalue)
+
+
+    peak_3km_shear_ks,peak_3km_shear_pvalue=(stats.kstest(cross_peak_3km_shear[np.isfinite(cross_peak_3km_shear)],'norm',args=(cross_peak_3km_shear_mean,
+                                                                                              cross_peak_3km_shear_std)))
+    print('Cross 3km SHEAR:',peak_3km_shear_ks,peak_3km_shear_pvalue)
+    
+    peak_6km_shear_ks,peak_6km_shear_pvalue=(stats.kstest(cross_peak_6km_shear[np.isfinite(cross_peak_6km_shear)],'norm',args=(cross_peak_6km_shear_mean,
+                                                                                              cross_peak_6km_shear_std)))
+    print('Cross 6km SHEAR:',peak_6km_shear_ks,peak_6km_shear_pvalue)
+    
+    peak_sbcape_ks,peak_sbcape_pvalue=(stats.kstest(cross_peak_sbcape[np.isfinite(cross_peak_sbcape)],'norm',args=(cross_peak_sbcape_mean,
+                                                                                              cross_peak_sbcape_std)))
+    print('Cross SBCAPE:',peak_sbcape_ks,peak_sbcape_pvalue)
+    
+    peak_mlcape_ks,peak_mlcape_pvalue=(stats.kstest(cross_peak_mlcape[np.isfinite(cross_peak_mlcape)],'norm',args=(cross_peak_mlcape_mean,
+                                                                                              cross_peak_mlcape_std)))
+    print('Cross MLCAPE:',peak_mlcape_ks,peak_mlcape_pvalue)
+    
+    peak_mucape_ks,peak_mucape_pvalue=(stats.kstest(cross_peak_mucape[np.isfinite(cross_peak_mucape)],'norm',args=(cross_peak_mucape_mean,
+                                                                                              cross_peak_mucape_std)))
+    print('Cross MUCAPE:',peak_mucape_ks,peak_mucape_pvalue)
+
+    peak_stp_ks,peak_stp_pvalue=(stats.kstest(cross_peak_stp[np.isfinite(cross_peak_stp)],'norm',args=(cross_peak_stp_mean,
+                                                                                              cross_peak_stp_std)))
+    print('Cross STP:',peak_stp_ks,peak_stp_pvalue)
+
+    peak_scp_ks,peak_scp_pvalue=(stats.kstest(cross_peak_scp[np.isfinite(cross_peak_scp)],'norm',args=(cross_peak_scp_mean,
+                                                                                              cross_peak_scp_std)))
+    print('Cross SCP:',peak_scp_ks,peak_scp_pvalue)
+
+    peak_sherb_ks,peak_sherb_pvalue=(stats.kstest(cross_peak_sherb[np.isfinite(cross_peak_sherb)],'norm',args=(cross_peak_sherb_mean,
+                                                                                              cross_peak_sherb_std)))
+    print('Cross SHERB:',peak_sherb_ks,peak_sherb_pvalue)
+
+    peak_1km_lapse_ks,peak_1km_lapse_pvalue=(stats.kstest(cross_peak_1km_lapse[np.isfinite(cross_peak_1km_lapse)],'norm',args=(cross_peak_1km_lapse_mean,
+                                                                                              cross_peak_1km_lapse_std)))
+    print('Cross 1KM_LAPSE:',peak_1km_lapse_ks,peak_1km_lapse_pvalue)
+
+    peak_1km_lapse_ks,peak_1km_lapse_pvalue=(stats.kstest(cross_peak_1km_lapse[np.isfinite(cross_peak_1km_lapse)],'norm',args=(cross_peak_1km_lapse_mean,
+                                                                                              cross_peak_1km_lapse_std)))
+    print('Cross 1KM_LAPSE:',peak_1km_lapse_ks,peak_1km_lapse_pvalue)
+    
+    peak_2km_lapse_ks,peak_2km_lapse_pvalue=(stats.kstest(cross_peak_2km_lapse[np.isfinite(cross_peak_2km_lapse)],'norm',args=(cross_peak_2km_lapse_mean,
+                                                                                              cross_peak_2km_lapse_std)))
+    print('Cross 2KM_LAPSE:',peak_2km_lapse_ks,peak_2km_lapse_pvalue)
+
+    peak_3km_lapse_ks,peak_3km_lapse_pvalue=(stats.kstest(cross_peak_3km_lapse[np.isfinite(cross_peak_3km_lapse)],'norm',args=(cross_peak_3km_lapse_mean,
+                                                                                              cross_peak_3km_lapse_std)))
+    print('Cross 3KM_LAPSE:',peak_3km_lapse_ks,peak_3km_lapse_pvalue)
+    
+    peak_6km_lapse_ks,peak_6km_lapse_pvalue=(stats.kstest(cross_peak_6km_lapse[np.isfinite(cross_peak_6km_lapse)],'norm',args=(cross_peak_6km_lapse_mean,
+                                                                                              cross_peak_6km_lapse_std)))
+    print('Cross 6KM_LAPSE:',peak_6km_lapse_ks,peak_6km_lapse_pvalue)
+
+    peak_mid_rh_ks,peak_mid_rh_pvalue=(stats.kstest(cross_peak_mid_rh[np.isfinite(cross_peak_mid_rh)],'norm',args=(cross_peak_mid_rh_mean,
+                                                                                              cross_peak_mid_rh_std)))
+    print('Cross mid_rh:',peak_mid_rh_ks,peak_mid_rh_pvalue)
+
+    peak_sfc_theta_ks,peak_sfc_theta_pvalue=(stats.kstest(cross_peak_sfc_theta[np.isfinite(cross_peak_sfc_theta)],'norm',args=(cross_peak_sfc_theta_mean,
+                                                                                              cross_peak_sfc_theta_std)))
+    print('Cross sfc_theta:',peak_sfc_theta_ks,peak_sfc_theta_pvalue)
+
+    peak_ml_theta_ks,peak_ml_theta_pvalue=(stats.kstest(cross_peak_ml_theta[np.isfinite(cross_peak_ml_theta)],'norm',args=(cross_peak_ml_theta_mean,
+                                                                                              cross_peak_ml_theta_std)))
+    print('Cross ml_theta:',peak_ml_theta_ks,peak_ml_theta_pvalue)
+    
+    peak_dcape_ks,peak_dcape_pvalue=(stats.kstest(cross_peak_dcape[np.isfinite(cross_peak_dcape)],'norm',args=(cross_peak_dcape_mean,
+                                                                                              cross_peak_dcape_std)))
+    print('Cross dcape:',peak_dcape_ks,peak_dcape_pvalue)
+    print()
+
+    print('Peak Non:')
+    peak_lcl_ks,peak_lcl_pvalue=(stats.kstest(non_peak_lcl[np.isfinite(non_peak_lcl)],'norm',args=(non_peak_lcl_mean,
+                                                                                              non_peak_lcl_std)))
+    print('Non LCL:', peak_lcl_ks,peak_lcl_pvalue)
+    
+    peak_lfc_ks,peak_lfc_pvalue=(stats.kstest(non_peak_lfc[np.isfinite(non_peak_lfc)],'norm',args=(non_peak_lfc_mean,
+                                                                                              non_peak_lfc_std)))
+    print('Non LFC:', peak_lfc_ks,peak_lfc_pvalue)
+
+    peak_el_ks,peak_el_pvalue=(stats.kstest(non_peak_el[np.isfinite(non_peak_el)],'norm',args=(non_peak_el_mean,
+                                                                                              non_peak_el_std)))
+    print('EL:', peak_el_ks,peak_el_pvalue)
+    
+    peak_h0_ks,peak_h0_pvalue=(stats.kstest(non_peak_h0[np.isfinite(non_peak_h0)],'norm',args=(non_peak_h0_mean,
+                                                                                              non_peak_h0_std)))
+    print('Non 0 deg height:',peak_h0_ks,peak_h0_pvalue)
+    
+    peak_h_neg20_ks,peak_h_neg20_pvalue=(stats.kstest(non_peak_h_neg20[np.isfinite(non_peak_h_neg20)],'norm',args=(non_peak_h_neg20_mean,
+                                                                                              non_peak_h_neg20_std)))
+    print('Non -20 deg height:',peak_h_neg20_ks,peak_h_neg20_pvalue)
+    
+    peak_wbzh_ks,peak_wbzh_pvalue=(stats.kstest(non_peak_wbzh[np.isfinite(non_peak_wbzh)],'norm',args=(non_peak_wbzh_mean,
+                                                                                              non_peak_wbzh_std)))
+    print('Non WBZH:',peak_wbzh_ks,peak_wbzh_pvalue)
+    
+    peak_1km_srh_ks,peak_1km_srh_pvalue=(stats.kstest(non_peak_1km_srh[np.isfinite(non_peak_1km_srh)],'norm',args=(non_peak_1km_srh_mean,
+                                                                                              non_peak_1km_srh_std)))
+    print('Non 1km SRH:',peak_1km_srh_ks,peak_1km_srh_pvalue)
+    
+    peak_3km_srh_ks,peak_3km_srh_pvalue=(stats.kstest(non_peak_3km_srh[np.isfinite(non_peak_3km_srh)],'norm',args=(non_peak_3km_srh_mean,
+                                                                                              non_peak_3km_srh_std)))
+    print('Non 3km SRH:',peak_3km_srh_ks,peak_3km_srh_pvalue)
+    
+    peak_1km_shear_ks,peak_1km_shear_pvalue=(stats.kstest(non_peak_1km_shear[np.isfinite(non_peak_1km_shear)],'norm',args=(non_peak_1km_shear_mean,
+                                                                                              non_peak_1km_shear_std)))
+    print('Non 1km SHEAR:',peak_1km_shear_ks,peak_1km_shear_pvalue)
+
+
+    peak_3km_shear_ks,peak_3km_shear_pvalue=(stats.kstest(non_peak_3km_shear[np.isfinite(non_peak_3km_shear)],'norm',args=(non_peak_3km_shear_mean,
+                                                                                              non_peak_3km_shear_std)))
+    print('Non 3km SHEAR:',peak_3km_shear_ks,peak_3km_shear_pvalue)
+    
+    peak_6km_shear_ks,peak_6km_shear_pvalue=(stats.kstest(non_peak_6km_shear[np.isfinite(non_peak_6km_shear)],'norm',args=(non_peak_6km_shear_mean,
+                                                                                              non_peak_6km_shear_std)))
+    print('Non 6km SHEAR:',peak_6km_shear_ks,peak_6km_shear_pvalue)
+    
+    peak_sbcape_ks,peak_sbcape_pvalue=(stats.kstest(non_peak_sbcape[np.isfinite(non_peak_sbcape)],'norm',args=(non_peak_sbcape_mean,
+                                                                                              non_peak_sbcape_std)))
+    print('Non SBCAPE:',peak_sbcape_ks,peak_sbcape_pvalue)
+    
+    peak_mlcape_ks,peak_mlcape_pvalue=(stats.kstest(non_peak_mlcape[np.isfinite(non_peak_mlcape)],'norm',args=(non_peak_mlcape_mean,
+                                                                                              non_peak_mlcape_std)))
+    print('Non MLCAPE:',peak_mlcape_ks,peak_mlcape_pvalue)
+    
+    peak_mucape_ks,peak_mucape_pvalue=(stats.kstest(non_peak_mucape[np.isfinite(non_peak_mucape)],'norm',args=(non_peak_mucape_mean,
+                                                                                              non_peak_mucape_std)))
+    print('Non MUCAPE:',peak_mucape_ks,peak_mucape_pvalue)
+
+    peak_stp_ks,peak_stp_pvalue=(stats.kstest(non_peak_stp[np.isfinite(non_peak_stp)],'norm',args=(non_peak_stp_mean,
+                                                                                              non_peak_stp_std)))
+    print('Non STP:',peak_stp_ks,peak_stp_pvalue)
+
+    peak_scp_ks,peak_scp_pvalue=(stats.kstest(non_peak_scp[np.isfinite(non_peak_scp)],'norm',args=(non_peak_scp_mean,
+                                                                                              non_peak_scp_std)))
+    print('Non SCP:',peak_scp_ks,peak_scp_pvalue)
+
+    peak_sherb_ks,peak_sherb_pvalue=(stats.kstest(non_peak_sherb[np.isfinite(non_peak_sherb)],'norm',args=(non_peak_sherb_mean,
+                                                                                              non_peak_sherb_std)))
+    print('Non SHERB:',peak_sherb_ks,peak_sherb_pvalue)
+
+    peak_1km_lapse_ks,peak_1km_lapse_pvalue=(stats.kstest(non_peak_1km_lapse[np.isfinite(non_peak_1km_lapse)],'norm',args=(non_peak_1km_lapse_mean,
+                                                                                              non_peak_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',peak_1km_lapse_ks,peak_1km_lapse_pvalue)
+
+    peak_1km_lapse_ks,peak_1km_lapse_pvalue=(stats.kstest(non_peak_1km_lapse[np.isfinite(non_peak_1km_lapse)],'norm',args=(non_peak_1km_lapse_mean,
+                                                                                              non_peak_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',peak_1km_lapse_ks,peak_1km_lapse_pvalue)
+    
+    peak_2km_lapse_ks,peak_2km_lapse_pvalue=(stats.kstest(non_peak_2km_lapse[np.isfinite(non_peak_2km_lapse)],'norm',args=(non_peak_2km_lapse_mean,
+                                                                                              non_peak_2km_lapse_std)))
+    print('Non 2KM_LAPSE:',peak_2km_lapse_ks,peak_2km_lapse_pvalue)
+
+    peak_3km_lapse_ks,peak_3km_lapse_pvalue=(stats.kstest(non_peak_3km_lapse[np.isfinite(non_peak_3km_lapse)],'norm',args=(non_peak_3km_lapse_mean,
+                                                                                              non_peak_3km_lapse_std)))
+    print('Non 3KM_LAPSE:',peak_3km_lapse_ks,peak_3km_lapse_pvalue)
+    
+    peak_6km_lapse_ks,peak_6km_lapse_pvalue=(stats.kstest(non_peak_6km_lapse[np.isfinite(non_peak_6km_lapse)],'norm',args=(non_peak_6km_lapse_mean,
+                                                                                              non_peak_6km_lapse_std)))
+    print('Non 6KM_LAPSE:',peak_6km_lapse_ks,peak_6km_lapse_pvalue)
+
+    peak_mid_rh_ks,peak_mid_rh_pvalue=(stats.kstest(non_peak_mid_rh[np.isfinite(non_peak_mid_rh)],'norm',args=(non_peak_mid_rh_mean,
+                                                                                              non_peak_mid_rh_std)))
+    print('Non mid_rh:',peak_mid_rh_ks,peak_mid_rh_pvalue)
+
+    peak_sfc_theta_ks,peak_sfc_theta_pvalue=(stats.kstest(non_peak_sfc_theta[np.isfinite(non_peak_sfc_theta)],'norm',args=(non_peak_sfc_theta_mean,
+                                                                                              non_peak_sfc_theta_std)))
+    print('Non sfc_theta:',peak_sfc_theta_ks,peak_sfc_theta_pvalue)
+
+    peak_ml_theta_ks,peak_ml_theta_pvalue=(stats.kstest(non_peak_ml_theta[np.isfinite(non_peak_ml_theta)],'norm',args=(non_peak_ml_theta_mean,
+                                                                                              non_peak_ml_theta_std)))
+    print('Non ml_theta:',peak_ml_theta_ks,peak_ml_theta_pvalue)
+    
+    peak_dcape_ks,peak_dcape_pvalue=(stats.kstest(non_peak_dcape[np.isfinite(non_peak_dcape)],'norm',args=(non_peak_dcape_mean,
+                                                                                              non_peak_dcape_std)))
+    print('Non dcape:',peak_dcape_ks,peak_dcape_pvalue)
+    print()
+
+    print('Down Cross:')
+    down_lcl_ks,down_lcl_pvalue=(stats.kstest(cross_down_lcl[np.isfinite(cross_down_lcl)],'norm',args=(cross_down_lcl_mean,
+                                                                                              cross_down_lcl_std)))
+    print('Cross LCL:', down_lcl_ks,down_lcl_pvalue)
+    
+    down_lfc_ks,down_lfc_pvalue=(stats.kstest(cross_down_lfc[np.isfinite(cross_down_lfc)],'norm',args=(cross_down_lfc_mean,
+                                                                                              cross_down_lfc_std)))
+    print('Cross LFC:', down_lfc_ks,down_lfc_pvalue)
+
+    down_el_ks,down_el_pvalue=(stats.kstest(cross_down_el[np.isfinite(cross_down_el)],'norm',args=(cross_down_el_mean,
+                                                                                              cross_down_el_std)))
+    print('EL:', down_el_ks,down_el_pvalue)
+    
+    down_h0_ks,down_h0_pvalue=(stats.kstest(cross_down_h0[np.isfinite(cross_down_h0)],'norm',args=(cross_down_h0_mean,
+                                                                                              cross_down_h0_std)))
+    print('Cross 0 deg height:',down_h0_ks,down_h0_pvalue)
+    
+    down_h_neg20_ks,down_h_neg20_pvalue=(stats.kstest(cross_down_h_neg20[np.isfinite(cross_down_h_neg20)],'norm',args=(cross_down_h_neg20_mean,
+                                                                                              cross_down_h_neg20_std)))
+    print('Cross -20 deg height:',down_h_neg20_ks,down_h_neg20_pvalue)
+    
+    down_wbzh_ks,down_wbzh_pvalue=(stats.kstest(cross_down_wbzh[np.isfinite(cross_down_wbzh)],'norm',args=(cross_down_wbzh_mean,
+                                                                                              cross_down_wbzh_std)))
+    print('Cross WBZH:',down_wbzh_ks,down_wbzh_pvalue)
+    
+    down_1km_srh_ks,down_1km_srh_pvalue=(stats.kstest(cross_down_1km_srh[np.isfinite(cross_down_1km_srh)],'norm',args=(cross_down_1km_srh_mean,
+                                                                                              cross_down_1km_srh_std)))
+    print('Cross 1km SRH:',down_1km_srh_ks,down_1km_srh_pvalue)
+    
+    down_3km_srh_ks,down_3km_srh_pvalue=(stats.kstest(cross_down_3km_srh[np.isfinite(cross_down_3km_srh)],'norm',args=(cross_down_3km_srh_mean,
+                                                                                              cross_down_3km_srh_std)))
+    print('Cross 3km SRH:',down_3km_srh_ks,down_3km_srh_pvalue)
+    
+    down_1km_shear_ks,down_1km_shear_pvalue=(stats.kstest(cross_down_1km_shear[np.isfinite(cross_down_1km_shear)],'norm',args=(cross_down_1km_shear_mean,
+                                                                                              cross_down_1km_shear_std)))
+    print('Cross 1km SHEAR:',down_1km_shear_ks,down_1km_shear_pvalue)
+
+
+    down_3km_shear_ks,down_3km_shear_pvalue=(stats.kstest(cross_down_3km_shear[np.isfinite(cross_down_3km_shear)],'norm',args=(cross_down_3km_shear_mean,
+                                                                                              cross_down_3km_shear_std)))
+    print('Cross 3km SHEAR:',down_3km_shear_ks,down_3km_shear_pvalue)
+    
+    down_6km_shear_ks,down_6km_shear_pvalue=(stats.kstest(cross_down_6km_shear[np.isfinite(cross_down_6km_shear)],'norm',args=(cross_down_6km_shear_mean,
+                                                                                              cross_down_6km_shear_std)))
+    print('Cross 6km SHEAR:',down_6km_shear_ks,down_6km_shear_pvalue)
+    
+    down_sbcape_ks,down_sbcape_pvalue=(stats.kstest(cross_down_sbcape[np.isfinite(cross_down_sbcape)],'norm',args=(cross_down_sbcape_mean,
+                                                                                              cross_down_sbcape_std)))
+    print('Cross SBCAPE:',down_sbcape_ks,down_sbcape_pvalue)
+    
+    down_mlcape_ks,down_mlcape_pvalue=(stats.kstest(cross_down_mlcape[np.isfinite(cross_down_mlcape)],'norm',args=(cross_down_mlcape_mean,
+                                                                                              cross_down_mlcape_std)))
+    print('Cross MLCAPE:',down_mlcape_ks,down_mlcape_pvalue)
+    
+    down_mucape_ks,down_mucape_pvalue=(stats.kstest(cross_down_mucape[np.isfinite(cross_down_mucape)],'norm',args=(cross_down_mucape_mean,
+                                                                                              cross_down_mucape_std)))
+    print('Cross MUCAPE:',down_mucape_ks,down_mucape_pvalue)
+
+    down_stp_ks,down_stp_pvalue=(stats.kstest(cross_down_stp[np.isfinite(cross_down_stp)],'norm',args=(cross_down_stp_mean,
+                                                                                              cross_down_stp_std)))
+    print('Cross STP:',down_stp_ks,down_stp_pvalue)
+
+    down_scp_ks,down_scp_pvalue=(stats.kstest(cross_down_scp[np.isfinite(cross_down_scp)],'norm',args=(cross_down_scp_mean,
+                                                                                              cross_down_scp_std)))
+    print('Cross SCP:',down_scp_ks,down_scp_pvalue)
+
+    down_sherb_ks,down_sherb_pvalue=(stats.kstest(cross_down_sherb[np.isfinite(cross_down_sherb)],'norm',args=(cross_down_sherb_mean,
+                                                                                              cross_down_sherb_std)))
+    print('Cross SHERB:',down_sherb_ks,down_sherb_pvalue)
+
+    down_1km_lapse_ks,down_1km_lapse_pvalue=(stats.kstest(cross_down_1km_lapse[np.isfinite(cross_down_1km_lapse)],'norm',args=(cross_down_1km_lapse_mean,
+                                                                                              cross_down_1km_lapse_std)))
+    print('Cross 1KM_LAPSE:',down_1km_lapse_ks,down_1km_lapse_pvalue)
+
+    down_1km_lapse_ks,down_1km_lapse_pvalue=(stats.kstest(cross_down_1km_lapse[np.isfinite(cross_down_1km_lapse)],'norm',args=(cross_down_1km_lapse_mean,
+                                                                                              cross_down_1km_lapse_std)))
+    print('Cross 1KM_LAPSE:',down_1km_lapse_ks,down_1km_lapse_pvalue)
+    
+    down_2km_lapse_ks,down_2km_lapse_pvalue=(stats.kstest(cross_down_2km_lapse[np.isfinite(cross_down_2km_lapse)],'norm',args=(cross_down_2km_lapse_mean,
+                                                                                              cross_down_2km_lapse_std)))
+    print('Cross 2KM_LAPSE:',down_2km_lapse_ks,down_2km_lapse_pvalue)
+
+    down_3km_lapse_ks,down_3km_lapse_pvalue=(stats.kstest(cross_down_3km_lapse[np.isfinite(cross_down_3km_lapse)],'norm',args=(cross_down_3km_lapse_mean,
+                                                                                              cross_down_3km_lapse_std)))
+    print('Cross 3KM_LAPSE:',down_3km_lapse_ks,down_3km_lapse_pvalue)
+    
+    down_6km_lapse_ks,down_6km_lapse_pvalue=(stats.kstest(cross_down_6km_lapse[np.isfinite(cross_down_6km_lapse)],'norm',args=(cross_down_6km_lapse_mean,
+                                                                                              cross_down_6km_lapse_std)))
+    print('Cross 6KM_LAPSE:',down_6km_lapse_ks,down_6km_lapse_pvalue)
+
+    down_mid_rh_ks,down_mid_rh_pvalue=(stats.kstest(cross_down_mid_rh[np.isfinite(cross_down_mid_rh)],'norm',args=(cross_down_mid_rh_mean,
+                                                                                              cross_down_mid_rh_std)))
+    print('Cross mid_rh:',down_mid_rh_ks,down_mid_rh_pvalue)
+
+    down_sfc_theta_ks,down_sfc_theta_pvalue=(stats.kstest(cross_down_sfc_theta[np.isfinite(cross_down_sfc_theta)],'norm',args=(cross_down_sfc_theta_mean,
+                                                                                              cross_down_sfc_theta_std)))
+    print('Cross sfc_theta:',down_sfc_theta_ks,down_sfc_theta_pvalue)
+
+    down_ml_theta_ks,down_ml_theta_pvalue=(stats.kstest(cross_down_ml_theta[np.isfinite(cross_down_ml_theta)],'norm',args=(cross_down_ml_theta_mean,
+                                                                                              cross_down_ml_theta_std)))
+    print('Cross ml_theta:',down_ml_theta_ks,down_ml_theta_pvalue)
+    
+    down_dcape_ks,down_dcape_pvalue=(stats.kstest(cross_down_dcape[np.isfinite(cross_down_dcape)],'norm',args=(cross_down_dcape_mean,
+                                                                                              cross_down_dcape_std)))
+    print('Cross dcape:',down_dcape_ks,down_dcape_pvalue)
+    print()
+
+    print('Down Non:')
+    down_lcl_ks,down_lcl_pvalue=(stats.kstest(non_down_lcl[np.isfinite(non_down_lcl)],'norm',args=(non_down_lcl_mean,
+                                                                                              non_down_lcl_std)))
+    print('Non LCL:', down_lcl_ks,down_lcl_pvalue)
+    
+    down_lfc_ks,down_lfc_pvalue=(stats.kstest(non_down_lfc[np.isfinite(non_down_lfc)],'norm',args=(non_down_lfc_mean,
+                                                                                              non_down_lfc_std)))
+    print('Non LFC:', down_lfc_ks,down_lfc_pvalue)
+
+    down_el_ks,down_el_pvalue=(stats.kstest(non_down_el[np.isfinite(non_down_el)],'norm',args=(non_down_el_mean,
+                                                                                              non_down_el_std)))
+    print('EL:', down_el_ks,down_el_pvalue)
+    
+    down_h0_ks,down_h0_pvalue=(stats.kstest(non_down_h0[np.isfinite(non_down_h0)],'norm',args=(non_down_h0_mean,
+                                                                                              non_down_h0_std)))
+    print('Non 0 deg height:',down_h0_ks,down_h0_pvalue)
+    
+    down_h_neg20_ks,down_h_neg20_pvalue=(stats.kstest(non_down_h_neg20[np.isfinite(non_down_h_neg20)],'norm',args=(non_down_h_neg20_mean,
+                                                                                              non_down_h_neg20_std)))
+    print('Non -20 deg height:',down_h_neg20_ks,down_h_neg20_pvalue)
+    
+    down_wbzh_ks,down_wbzh_pvalue=(stats.kstest(non_down_wbzh[np.isfinite(non_down_wbzh)],'norm',args=(non_down_wbzh_mean,
+                                                                                              non_down_wbzh_std)))
+    print('Non WBZH:',down_wbzh_ks,down_wbzh_pvalue)
+    
+    down_1km_srh_ks,down_1km_srh_pvalue=(stats.kstest(non_down_1km_srh[np.isfinite(non_down_1km_srh)],'norm',args=(non_down_1km_srh_mean,
+                                                                                              non_down_1km_srh_std)))
+    print('Non 1km SRH:',down_1km_srh_ks,down_1km_srh_pvalue)
+    
+    down_3km_srh_ks,down_3km_srh_pvalue=(stats.kstest(non_down_3km_srh[np.isfinite(non_down_3km_srh)],'norm',args=(non_down_3km_srh_mean,
+                                                                                              non_down_3km_srh_std)))
+    print('Non 3km SRH:',down_3km_srh_ks,down_3km_srh_pvalue)
+    
+    down_1km_shear_ks,down_1km_shear_pvalue=(stats.kstest(non_down_1km_shear[np.isfinite(non_down_1km_shear)],'norm',args=(non_down_1km_shear_mean,
+                                                                                              non_down_1km_shear_std)))
+    print('Non 1km SHEAR:',down_1km_shear_ks,down_1km_shear_pvalue)
+
+
+    down_3km_shear_ks,down_3km_shear_pvalue=(stats.kstest(non_down_3km_shear[np.isfinite(non_down_3km_shear)],'norm',args=(non_down_3km_shear_mean,
+                                                                                              non_down_3km_shear_std)))
+    print('Non 3km SHEAR:',down_3km_shear_ks,down_3km_shear_pvalue)
+    
+    down_6km_shear_ks,down_6km_shear_pvalue=(stats.kstest(non_down_6km_shear[np.isfinite(non_down_6km_shear)],'norm',args=(non_down_6km_shear_mean,
+                                                                                              non_down_6km_shear_std)))
+    print('Non 6km SHEAR:',down_6km_shear_ks,down_6km_shear_pvalue)
+    
+    down_sbcape_ks,down_sbcape_pvalue=(stats.kstest(non_down_sbcape[np.isfinite(non_down_sbcape)],'norm',args=(non_down_sbcape_mean,
+                                                                                              non_down_sbcape_std)))
+    print('Non SBCAPE:',down_sbcape_ks,down_sbcape_pvalue)
+    
+    down_mlcape_ks,down_mlcape_pvalue=(stats.kstest(non_down_mlcape[np.isfinite(non_down_mlcape)],'norm',args=(non_down_mlcape_mean,
+                                                                                              non_down_mlcape_std)))
+    print('Non MLCAPE:',down_mlcape_ks,down_mlcape_pvalue)
+    
+    down_mucape_ks,down_mucape_pvalue=(stats.kstest(non_down_mucape[np.isfinite(non_down_mucape)],'norm',args=(non_down_mucape_mean,
+                                                                                              non_down_mucape_std)))
+    print('Non MUCAPE:',down_mucape_ks,down_mucape_pvalue)
+
+    down_stp_ks,down_stp_pvalue=(stats.kstest(non_down_stp[np.isfinite(non_down_stp)],'norm',args=(non_down_stp_mean,
+                                                                                              non_down_stp_std)))
+
+    print('Non STP:',down_stp_ks,down_stp_pvalue)
+
+    down_scp_ks,down_scp_pvalue=(stats.kstest(non_down_scp[np.isfinite(non_down_scp)],'norm',args=(non_down_scp_mean,
+                                                                                              non_down_scp_std)))
+    print('Non SCP:',down_scp_ks,down_scp_pvalue)
+
+    down_sherb_ks,down_sherb_pvalue=(stats.kstest(non_down_sherb[np.isfinite(non_down_sherb)],'norm',args=(non_down_sherb_mean,
+                                                                                              non_down_sherb_std)))
+    print('Non SHERB:',down_sherb_ks,down_sherb_pvalue)
+
+    down_1km_lapse_ks,down_1km_lapse_pvalue=(stats.kstest(non_down_1km_lapse[np.isfinite(non_down_1km_lapse)],'norm',args=(non_down_1km_lapse_mean,
+                                                                                              non_down_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',down_1km_lapse_ks,down_1km_lapse_pvalue)
+
+    down_1km_lapse_ks,down_1km_lapse_pvalue=(stats.kstest(non_down_1km_lapse[np.isfinite(non_down_1km_lapse)],'norm',args=(non_down_1km_lapse_mean,
+                                                                                              non_down_1km_lapse_std)))
+    print('Non 1KM_LAPSE:',down_1km_lapse_ks,down_1km_lapse_pvalue)
+    
+    down_2km_lapse_ks,down_2km_lapse_pvalue=(stats.kstest(non_down_2km_lapse[np.isfinite(non_down_2km_lapse)],'norm',args=(non_down_2km_lapse_mean,
+                                                                                              non_down_2km_lapse_std)))
+    print('Non 2KM_LAPSE:',down_2km_lapse_ks,down_2km_lapse_pvalue)
+
+    down_3km_lapse_ks,down_3km_lapse_pvalue=(stats.kstest(non_down_3km_lapse[np.isfinite(non_down_3km_lapse)],'norm',args=(non_down_3km_lapse_mean,
+                                                                                              non_down_3km_lapse_std)))
+    print('Non 3KM_LAPSE:',down_3km_lapse_ks,down_3km_lapse_pvalue)
+    
+    down_6km_lapse_ks,down_6km_lapse_pvalue=(stats.kstest(non_down_6km_lapse[np.isfinite(non_down_6km_lapse)],'norm',args=(non_down_6km_lapse_mean,
+                                                                                              non_down_6km_lapse_std)))
+    print('Non 6KM_LAPSE:',down_6km_lapse_ks,down_6km_lapse_pvalue)
+
+    down_mid_rh_ks,down_mid_rh_pvalue=(stats.kstest(non_down_mid_rh[np.isfinite(non_down_mid_rh)],'norm',args=(non_down_mid_rh_mean,
+                                                                                              non_down_mid_rh_std)))
+    print('Non mid_rh:',down_mid_rh_ks,down_mid_rh_pvalue)
+
+    down_sfc_theta_ks,down_sfc_theta_pvalue=(stats.kstest(non_down_sfc_theta[np.isfinite(non_down_sfc_theta)],'norm',args=(non_down_sfc_theta_mean,
+                                                                                              non_down_sfc_theta_std)))
+    print('Non sfc_theta:',down_sfc_theta_ks,down_sfc_theta_pvalue)
+
+    down_ml_theta_ks,down_ml_theta_pvalue=(stats.kstest(non_down_ml_theta[np.isfinite(non_down_ml_theta)],'norm',args=(non_down_ml_theta_mean,
+                                                                                              non_down_ml_theta_std)))
+    print('Non ml_theta:',down_ml_theta_ks,down_ml_theta_pvalue)
+    
+    down_dcape_ks,down_dcape_pvalue=(stats.kstest(non_down_dcape[np.isfinite(non_down_dcape)],'norm',args=(non_down_dcape_mean,
+                                                                                              non_down_dcape_std)))
+    print('Non dcape:',down_dcape_ks,down_dcape_pvalue)
+    print()
+
+#reads in data files
+up=pd.read_csv(r'/Users/sarahpurpura/Desktop/Thesis/Stats/All/Master Soundings - Upstream.csv')
+peak=pd.read_csv(r'/Users/sarahpurpura/Desktop/Thesis/Stats/All/Master Soundings - Peak.csv')
+down=pd.read_csv(r'/Users/sarahpurpura/Desktop/Thesis/Stats/All/Master Soundings - Downstream.csv')
+
+#calls definition
+normality(up,peak,down)
